@@ -14,9 +14,10 @@ logger = logging.getLogger("taut.proxy")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialize the global taut pipeline
-    logger.info("Initializing taut pipeline for Proxy Mode...")
-    config = taut.TautConfig.from_env()
-    app.state.pipeline = taut.create_pipeline(config)
+    if getattr(app.state, "pipeline", None) is None:
+        logger.info("Initializing taut pipeline for Proxy Mode...")
+        config = taut.TautConfig.from_env()
+        app.state.pipeline = taut.create_pipeline(config)
     yield
     logger.info("Shutting down taut proxy...")
 

@@ -1,7 +1,7 @@
 """Abstract base class for all taut pipeline middleware layers."""
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Awaitable, Callable
+from typing import Awaitable, Callable, AsyncIterator
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext
 
 class Middleware(ABC):
@@ -59,3 +59,18 @@ class Middleware(ABC):
         Return an LLMResponse to recover from the error, or None to re-raise.
         """
         return None
+
+    async def stream_process(
+        self,
+        request: LLMRequest,
+        context: PipelineContext,
+        next_handler: Callable[[LLMRequest, PipelineContext], AsyncIterator[str]],
+    ) -> AsyncIterator[str]:
+        """Process a streaming request through this middleware layer.
+        
+        By default, yields chunks from the next handler.
+        """
+        if hasattr(self, 'before_request'):
+            request = await self.before_request(request, context)
+        async for chunk in next_handler(request, context):
+            yield chunk

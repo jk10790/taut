@@ -111,3 +111,76 @@ class SemanticCacheMiddleware(Middleware):
 
     async def before_request(self, request: LLMRequest, context: PipelineContext) -> LLMRequest:
         return request
+
+    async def stream_process(self, request: LLMRequest, context: PipelineContext, next_handler: Callable):
+        cache_key = self._compute_key(request)
+        namespace = request.namespace or "default"
+
+        # Tier 1: Exact Match
+        try:
+            exact_hit = await self._backend.get_exact(namespace, cache_key)
+            if exact_hit:
+                context.extra["cache_status"] = "exact_hit"
+                self._record_metrics(context, hit=True)
+                
+                content = exact_hit.value.content
+                chunk_size = max(1, len(content) // 20)
+                for i in range(0, len(content), chunk_size):
+                    yield content[i:i+chunk_size]
+                    await asyncio.sleep(0.01)
+                return
+        except Exception as e:
+            logger.warning(f"Cache get_exact failed during stream: {e}")
+
+        # Tier 2: Semantic Similarity
+        embedding = None
+        if self._config.similarity_threshold < 1.0:
+            try:
+                embedding = await self._embed_text(self._cache_text(request))
+                similar_hit = await self._backend.get_similar(
+                    namespace, embedding, self._config.similarity_threshold
+                )
+                if similar_hit:
+                    context.extra["cache_status"] = "semantic_hit"
+                    self._record_metrics(context, hit=True)
+                    
+                    content = similar_hit.value.content
+                    chunk_size = max(1, len(content) // 20)
+                    for i in range(0, len(content), chunk_size):
+                        yield content[i:i+chunk_size]
+                        await asyncio.sleep(0.01)
+                    return
+            except Exception as e:
+                logger.warning(f"Cache get_similar failed during stream: {e}")
+
+        # Cache miss — continue pipeline
+        context.extra["cache_status"] = "miss"
+        
+        chunks = []
+        async for chunk in next_handler(request, context):
+            chunks.append(chunk)
+            yield chunk
+            
+        full_text = "".join(chunks)
+        
+        from taut.core.models import TokenUsage
+        response = LLMResponse(
+            content=full_text,
+            model=context.selected_model or request.model or "unknown",
+            usage=TokenUsage()
+        )
+        
+        try:
+            if embedding is None:
+                embedding = await self._embed_text(self._cache_text(request))
+            entry = CacheEntry(
+                key=cache_key,
+                embedding=embedding,
+                value=response,
+                ttl=float(self._config.ttl_seconds) if self._config.ttl_seconds else None
+            )
+            await self._backend.put(namespace, entry)
+        except Exception as e:
+            logger.warning(f"Cache put failed during stream: {e}")
+
+        self._record_metrics(context, hit=False)

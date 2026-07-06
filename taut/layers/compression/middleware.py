@@ -6,6 +6,7 @@ from taut.core.models import LLMRequest, LLMResponse, PipelineContext, LayerMetr
 from taut.core.config import CompressionConfig
 
 from .detector import ContentDetector
+from .registry import CompressionRegistry
 from .strategies.json_crusher import SmartCrusher
 from .strategies.code_compressor import CodeCompressor
 from .strategies.prose_compressor import ProseCompressor
@@ -35,6 +36,18 @@ class CompressionMiddleware(Middleware):
         return total
 
     def _apply_strategy(self, text: str, content_type: str, context: PipelineContext) -> str:
+        # Check custom registry first
+        custom_compressor = CompressionRegistry.get_compressor(content_type)
+        if custom_compressor:
+            try:
+                return custom_compressor(text)
+            except Exception as e:
+                import logging
+                logging.getLogger("taut.compression").warning(f"Custom compressor for {content_type} failed: {e}")
+                # Fall back to default logic based on what happens next
+                # Here we just return text if custom fails
+                return text
+                
         if content_type == "json" and self._config.json_enabled:
             return self._json_compressor.compress(text).compressed_text
         elif content_type == "code" and self._config.code_enabled:
@@ -58,8 +71,8 @@ class CompressionMiddleware(Middleware):
                     inner_code = '\n'.join(lines[1:-1])
                     if inner_code.strip():
                         sub_type = self._detector.detect(inner_code)
-                        # We avoid recursing into mixed again to prevent bugs, but JSON/CODE are safe
-                        if sub_type in ("json", "code"):
+                        # Avoid recursing into mixed again to prevent bugs
+                        if sub_type != "mixed":
                             inner_code = self._apply_strategy(inner_code, sub_type, context)
                         compressed_parts.append(f"{fence_start}\n{inner_code}\n{fence_end}")
                     else:

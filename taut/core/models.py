@@ -50,7 +50,7 @@ class TokenUsage(BaseModel):
     """
     input_tokens: int = 0
     output_tokens: int = 0
-    cached_tokens: int = 0
+    cached_tokens: int | None = 0
     total_tokens: int = 0
     @model_validator(mode="after")
     def _compute_total(self) -> Self:

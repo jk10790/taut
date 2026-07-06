@@ -1,9 +1,10 @@
 import json
 import ast
 import re
+from .registry import CompressionRegistry
 
 class ContentDetector:
-    """Detects content types: JSON, CODE, PROSE, MIXED."""
+    """Detects content types: custom plugins, JSON, CODE, PROSE, MIXED."""
     
     @staticmethod
     def is_json(text: str) -> bool:
@@ -42,8 +43,14 @@ class ContentDetector:
     def detect(text: str) -> str:
         """
         Detects the predominant content type.
-        Returns one of 'json', 'code', 'prose', 'mixed'.
+        Returns the registered MIME type, or one of 'json', 'code', 'prose', 'mixed'.
         """
+        # 1. Check custom registries first
+        for p in CompressionRegistry._plugins:
+            if p["matcher"] and p["matcher"](text):
+                return p["mime_type"]
+                
+        # 2. Built-in heuristics
         if ContentDetector.is_json(text):
             return "json"
             

@@ -32,12 +32,12 @@ class MockProvider(BaseProvider):
             raw_response=None
         )
         
-    async def complete_stream(self, request: LLMRequest, model: str) -> AsyncGenerator[dict, None]:
+    async def complete_stream(self, request: LLMRequest, context: PipelineContext) -> AsyncGenerator[str, None]:
         self.received_requests.append(request)
         
-        yield {"choices": [{"delta": {"content": "Mock "}}]}
-        yield {"choices": [{"delta": {"content": "stream "}}]}
-        yield {"choices": [{"delta": {"content": "response"}}]}
+        yield "Mock "
+        yield "stream "
+        yield "response"
 
 @pytest.fixture
 def full_config():

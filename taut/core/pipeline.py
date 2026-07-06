@@ -2,7 +2,7 @@
 import asyncio
 import logging
 import time
-from typing import Callable
+from typing import Callable, AsyncIterator
 
 from taut.core.config import (
     SemanticCacheConfig, CompressionConfig, 
@@ -14,6 +14,7 @@ from taut.core.models import LLMRequest, LLMResponse, PipelineContext
 from taut.observability.metrics import MetricsCollector
 from taut.observability.events import EventBus
 from taut.providers.base import BaseProvider
+from taut.core.resilience import with_retries, ProviderBusyException, FallbackExhaustedError
 
 logger = logging.getLogger("taut.pipeline")
 
@@ -108,38 +109,117 @@ class Pipeline:
 
     async def stream(self, request: LLMRequest):
         """Execute the full optimization pipeline and stream the response."""
-        from typing import AsyncIterator
-        
         self._convert_blocks_to_messages(request)
         context = PipelineContext(
             original_request=request.model_copy(deep=True),
         )
         context.metrics.request_id = context.request_id
         
-        # Run pre-request middleware hooks (if available)
-        for mw in self._middlewares:
-            if hasattr(mw, "before_request"):
-                request = await mw.before_request(request, context)
-        
-        model = context.selected_model or getattr(self._provider, "default_model", None)
-        if model:
-            request.model = model
+        async def terminal_handler(req: LLMRequest, ctx: PipelineContext) -> AsyncIterator[str]:
+            models_to_try = []
+            if ctx.selected_model:
+                models_to_try.append(ctx.selected_model)
+            elif req.model:
+                models_to_try.append(req.model)
+            else:
+                default_mod = getattr(self._provider, "default_model", None)
+                if default_mod:
+                    models_to_try.append(default_mod)
             
-        async for chunk in self._provider.complete_stream(request, context):
+            fallbacks = getattr(self._provider, "fallback_models", None) or []
+            if hasattr(ctx, "routing_fallbacks") and ctx.routing_fallbacks:
+                fallbacks = ctx.routing_fallbacks
+                
+            models_to_try.extend([m for m in fallbacks if m not in models_to_try])
+            if not models_to_try:
+                models_to_try = ["unknown"]
+
+            last_error = None
+            for model in models_to_try:
+                req.model = model
+                ctx.selected_model = model
+                
+                try:
+                    # Very simple retry logic for stream (generator can't easily be decorated with @with_retries without fully buffering)
+                    # We'll rely on the provider's native streaming retries, or just try fallbacks if it fails initially.
+                    generator_started = False
+                    async for chunk in self._provider.complete_stream(req, ctx):
+                        generator_started = True
+                        yield chunk
+                    return # Successfully finished stream
+                except Exception as e:
+                    logger.warning(f"Stream Model {model} failed: {e}. Trying next fallback...")
+                    last_error = e
+                    if generator_started:
+                        # Cannot fallback if we already yielded chunks!
+                        raise
+            
+            raise FallbackExhaustedError(f"All stream models failed. Last error: {last_error}") from last_error
+                
+        handler = terminal_handler
+        for mw in reversed(self._middlewares):
+            handler = self._wrap_stream_middleware(mw, handler)
+
+        async for chunk in handler(request, context):
             yield chunk
             
         # Emit stream complete event
         await self._events.emit("stream_complete", request=request, context=context)
+
+    def _wrap_stream_middleware(self, mw: Middleware, next_handler: Callable):
+        async def handler(request: LLMRequest, context: PipelineContext):
+            async for chunk in mw.stream_process(request, context, next_handler):
+                yield chunk
+        return handler
     
     async def _call_provider(
         self, request: LLMRequest, context: PipelineContext
     ) -> LLMResponse:
-        """Terminal handler — calls the actual LLM provider."""
+        """Terminal handler — calls the actual LLM provider with fallback & retries."""
+        models_to_try = []
         if context.selected_model:
-            request.model = context.selected_model
-        response = await self._provider.complete(request, context)
-        context.metrics.model_used = response.model
-        return response
+            models_to_try.append(context.selected_model)
+        elif request.model:
+            models_to_try.append(request.model)
+        else:
+            default_mod = getattr(self._provider, "default_model", None)
+            if default_mod:
+                models_to_try.append(default_mod)
+        
+        # Add fallbacks from config if present
+        fallbacks = getattr(self._provider, "fallback_models", None) or []
+        if hasattr(context, "routing_fallbacks") and context.routing_fallbacks:
+            fallbacks = context.routing_fallbacks
+            
+        models_to_try.extend([m for m in fallbacks if m not in models_to_try])
+        if not models_to_try:
+            models_to_try = ["unknown"]
+
+        last_error = None
+        for model in models_to_try:
+            request.model = model
+            context.selected_model = model
+            
+            # Decorate the inner call with retries for transient errors
+            @with_retries(max_retries=getattr(self._provider, 'num_retries', 2), exceptions=(ProviderBusyException, TimeoutError))
+            async def _do_call():
+                try:
+                    return await self._provider.complete(request, context)
+                except Exception as e:
+                    error_str = str(e).lower()
+                    if "timeout" in error_str or "429" in error_str or "500" in error_str or "502" in error_str or "503" in error_str or "504" in error_str:
+                        raise ProviderBusyException(str(e)) from e
+                    raise
+
+            try:
+                response = await _do_call()
+                context.metrics.model_used = response.model
+                return response
+            except Exception as e:
+                logger.warning(f"Model {model} failed: {e}. Trying next fallback...")
+                last_error = e
+
+        raise FallbackExhaustedError(f"All models failed. Last error: {last_error}") from last_error
     
     def _wrap_middleware(self, mw: Middleware, next_handler: Callable):
         """Wrap a middleware with error handling and timing."""
@@ -195,6 +275,7 @@ def create_pipeline(config: TautConfig | None = None, **kwargs) -> Pipeline:
         default_model=config.default_model or _default_model_for(config.provider),
         api_key=config.api_key,
         base_url=config.base_url,
+        fallback_models=config.fallback_models,
     )
     
     middlewares: list[Middleware] = []

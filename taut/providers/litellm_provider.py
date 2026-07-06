@@ -51,7 +51,11 @@ class LiteLLMProvider(BaseProvider):
             
         try:
             if self.fallback_models:
-                router = litellm.Router(model_list=[{"model_name": model, "litellm_params": {"model": model}}] + [{"model_name": m, "litellm_params": {"model": m}} for m in self.fallback_models])
+                base_params = {"api_key": self.api_key} if self.api_key else {}
+                if self.base_url: base_params["api_base"] = self.base_url
+                model_list = [{"model_name": model, "litellm_params": {"model": model, **base_params}}]
+                model_list += [{"model_name": m, "litellm_params": {"model": m, **base_params}} for m in self.fallback_models]
+                router = litellm.Router(model_list=model_list)
                 response = await router.acompletion(**kwargs)
             else:
                 response = await litellm.acompletion(**kwargs)
@@ -75,7 +79,7 @@ class LiteLLMProvider(BaseProvider):
             usage=TokenUsage(
                 input_tokens=prompt_tokens,
                 output_tokens=completion_tokens,
-                cached_tokens=(getattr(usage, 'prompt_tokens_details', None) or {}).get('cached_tokens', 0) if usage else 0,
+                cached_tokens=(getattr(usage.prompt_tokens_details, 'cached_tokens', 0) if not isinstance(getattr(usage, 'prompt_tokens_details', None), dict) else getattr(usage, 'prompt_tokens_details', {}).get('cached_tokens', 0)) if getattr(usage, 'prompt_tokens_details', None) else 0,
             ),
             finish_reason=response.choices[0].finish_reason if response.choices else None,
             tool_calls=response.choices[0].message.tool_calls if response.choices else None,
@@ -118,7 +122,11 @@ class LiteLLMProvider(BaseProvider):
             kwargs["stop"] = request.stop
 
         if self.fallback_models:
-            router = litellm.Router(model_list=[{"model_name": model, "litellm_params": {"model": model}}] + [{"model_name": m, "litellm_params": {"model": m}} for m in self.fallback_models])
+            base_params = {"api_key": self.api_key} if self.api_key else {}
+            if self.base_url: base_params["api_base"] = self.base_url
+            model_list = [{"model_name": model, "litellm_params": {"model": model, **base_params}}]
+            model_list += [{"model_name": m, "litellm_params": {"model": m, **base_params}} for m in self.fallback_models]
+            router = litellm.Router(model_list=model_list)
             response = await router.acompletion(**kwargs)
         else:
             response = await litellm.acompletion(**kwargs)

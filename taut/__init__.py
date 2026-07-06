@@ -17,9 +17,12 @@ from taut.core.config import (
     CompressionConfig as Compression,
     PrefixAlignmentConfig as PrefixAlignment,
     TieredRoutingConfig as TieredRouting,
+    TieredRoutingConfig,
     OutputRestraintConfig as OutputRestraint,
     TautConfig,
 )
+from taut.core.prompt_blocks import SystemBlock
+from taut.core.resilience import CapacityExceededError
 from taut.core.middleware import Middleware
 from taut.providers.base import BaseProvider
 
@@ -46,6 +49,14 @@ def __getattr__(name: str):
         except ImportError:
             pass
             
+    if name == "register_compressor":
+        try:
+            from taut.layers.compression.registry import register_compressor
+            globals()["register_compressor"] = register_compressor
+            return register_compressor
+        except ImportError:
+            pass
+
     raise AttributeError(f"module 'taut' has no attribute {name}")
 
 __all__ = [
@@ -53,8 +64,10 @@ __all__ = [
     "LLMRequest", "LLMResponse", "PipelineContext", "TokenUsage",
     "PipelineMetrics", "Message", "ContentBlock", "LayerMetrics",
     "SemanticCache", "Compression", "PrefixAlignment", "TieredRouting",
+    "TieredRoutingConfig", "SystemBlock", "CapacityExceededError",
     "OutputRestraint", "TautConfig",
     "Pipeline", "create_pipeline",
     "Middleware", "BaseProvider",
     "CacheBackend", "Embedder",
+    "register_compressor",
 ]
