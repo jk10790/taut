@@ -1,0 +1,60 @@
+"""taut — AI Efficiency Middleware. Zero Waste Compute for LLM applications."""
+
+__version__ = "0.1.0"
+
+from taut.core.models import (
+    LLMRequest,
+    LLMResponse,
+    PipelineContext,
+    TokenUsage,
+    PipelineMetrics,
+    Message,
+    ContentBlock,
+    LayerMetrics,
+)
+from taut.core.config import (
+    SemanticCacheConfig as SemanticCache,
+    CompressionConfig as Compression,
+    PrefixAlignmentConfig as PrefixAlignment,
+    TieredRoutingConfig as TieredRouting,
+    OutputRestraintConfig as OutputRestraint,
+    TautConfig,
+)
+from taut.core.middleware import Middleware
+from taut.providers.base import BaseProvider
+
+def __getattr__(name: str):
+    if name in ("Pipeline", "create_pipeline"):
+        from taut.core.pipeline import Pipeline, create_pipeline
+        globals()["Pipeline"] = Pipeline
+        globals()["create_pipeline"] = create_pipeline
+        return globals()[name]
+    
+    if name == "CacheBackend":
+        try:
+            from taut.layers.cache.backends.base import CacheBackend
+            globals()["CacheBackend"] = CacheBackend
+            return CacheBackend
+        except ImportError:
+            pass
+            
+    if name == "Embedder":
+        try:
+            from taut.layers.cache.embedder import Embedder
+            globals()["Embedder"] = Embedder
+            return Embedder
+        except ImportError:
+            pass
+            
+    raise AttributeError(f"module 'taut' has no attribute {name}")
+
+__all__ = [
+    "__version__",
+    "LLMRequest", "LLMResponse", "PipelineContext", "TokenUsage",
+    "PipelineMetrics", "Message", "ContentBlock", "LayerMetrics",
+    "SemanticCache", "Compression", "PrefixAlignment", "TieredRouting",
+    "OutputRestraint", "TautConfig",
+    "Pipeline", "create_pipeline",
+    "Middleware", "BaseProvider",
+    "CacheBackend", "Embedder",
+]
