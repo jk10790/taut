@@ -1,3 +1,19 @@
+> **Status: original product brief, retained for design intent.**
+>
+> This is the document the project was designed from. It is not a description
+> of shipped behaviour, and its performance figures were targets rather than
+> measurements. For what `taut` actually does today, see
+> [README.md](README.md), [docs/capabilities.md](docs/capabilities.md) and
+> [docs/claims.yaml](docs/claims.yaml); for measured numbers see
+> [tests/benchmarks/baseline.json](tests/benchmarks/baseline.json).
+>
+> Two things in this brief were never built: the "40-80%" figure for Layer 2 is
+> carried entirely by structural compression (JSON/code, measured 54-58%) and
+> not at all by prose compression (measured ~0%), and Layer 3's "up to 90% on
+> static portions" has never been measured. Codenames used below map to
+> shipped modules as: Headroom -> `layers/compression/strategies/json_crusher.py`,
+> Caveman -> `strategies/prose_compressor.py`, Ponytail -> `layers/restraint/`.
+
 Product Brief: AI Efficiency Middleware (AIEM)
 1. Goal
 To provide a drop-in middleware library that intercepts, compresses, and routes LLM requests to minimize API costs and execution latency, without degrading the accuracy of the AI's output.

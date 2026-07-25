@@ -31,8 +31,16 @@ class HeuristicClassifier:
         # 2. Text complexity factor
         text_content = ""
 
+        # request.intent is the user's actual question. Omitting it meant the
+        # complexity keywords ("analyze", "synthesize", "architect", ...) were
+        # scored against everything *except* the sentence most likely to
+        # contain them, so reasoning-heavy asks under-scored and were routed to
+        # a cheap model.
+        if request.intent:
+            text_content += request.intent
+
         if request.system_prompt:
-            text_content += request.system_prompt
+            text_content += "\n" + request.system_prompt
 
         if request.messages:
             for msg in request.messages:
