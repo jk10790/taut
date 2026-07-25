@@ -1,8 +1,8 @@
 """API routes for the taut proxy."""
 import time
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
-from taut.core.models import LLMRequest, Message, ContentBlock
+from taut.core.models import LLMRequest, Message
 
 router = APIRouter()
 

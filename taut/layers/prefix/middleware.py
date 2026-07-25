@@ -1,6 +1,6 @@
 """Middleware for prefix alignment."""
 import time
-from typing import Awaitable, Callable
+from collections.abc import Awaitable, Callable
 from taut.core.middleware import Middleware
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext, LayerMetrics, Message
 from taut.core.config import PrefixAlignmentConfig

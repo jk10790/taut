@@ -1,8 +1,8 @@
 import pytest
 import asyncio
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
-from taut.core.config import TautConfig, SemanticCacheConfig, TieredRoutingConfig
+from taut.core.config import TautConfig, SemanticCacheConfig
 from taut.core.pipeline import create_pipeline
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext, TokenUsage
 from taut.providers.base import BaseProvider
@@ -29,8 +29,8 @@ class FailingMockProvider(BaseProvider):
         if request.model == "failing-model":
             raise ProviderBusyException("Simulated 503 error from failing-model stream")
             
-        yield f"Success "
-        yield f"from "
+        yield "Success "
+        yield "from "
         yield request.model
 
 @pytest.fixture

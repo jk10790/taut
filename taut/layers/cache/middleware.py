@@ -1,13 +1,12 @@
 import asyncio
 import hashlib
 import logging
-from typing import Callable
+from collections.abc import Callable
 
 from taut.core.middleware import Middleware
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext, LayerMetrics
 from taut.core.config import SemanticCacheConfig
 from .backends.base import CacheBackend, CacheEntry
-from .embedder import Embedder
 
 logger = logging.getLogger("taut.cache")
 

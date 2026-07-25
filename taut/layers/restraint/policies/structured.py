@@ -1,4 +1,8 @@
 """Structured JSON output restraint policy."""
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from taut.core.models import PipelineContext
 from typing import Any
 from .base import RestraintPolicy
 

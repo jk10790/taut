@@ -4,7 +4,7 @@ import time
 from typing import Any, Literal
 from uuid import uuid4
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, model_validator
-from typing_extensions import Self
+from typing import Self
 
 from taut.core.prompt_blocks import PromptBlock
 

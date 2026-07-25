@@ -2,11 +2,9 @@
 import asyncio
 import logging
 import time
-from typing import Callable, AsyncIterator
+from collections.abc import Callable, AsyncIterator
 
 from taut.core.config import (
-    SemanticCacheConfig, CompressionConfig, 
-    PrefixAlignmentConfig, TieredRoutingConfig, OutputRestraintConfig,
     TautConfig
 )
 from taut.core.middleware import Middleware
@@ -99,7 +97,7 @@ class Pipeline:
     def run_sync(self, request: LLMRequest) -> LLMResponse:
         """Synchronous wrapper for run()."""
         try:
-            loop = asyncio.get_running_loop()
+            asyncio.get_running_loop()
         except RuntimeError:
             return asyncio.run(self.run(request))
         else:

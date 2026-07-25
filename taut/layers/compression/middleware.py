@@ -1,5 +1,5 @@
 import re
-from typing import Any, Callable
+from collections.abc import Callable
 
 from taut.core.middleware import Middleware
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext, LayerMetrics

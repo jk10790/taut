@@ -1,6 +1,4 @@
 import asyncio
-import time
-from typing import Any, Dict, List, Optional
 from collections import OrderedDict
 import numpy as np
 
@@ -15,7 +13,7 @@ class NamespaceCache:
     def __init__(self, embedding_dim: int):
         self.cache: OrderedDict[str, CacheEntry] = OrderedDict()
         self.index = faiss.IndexFlatIP(embedding_dim) if faiss else None
-        self.id_to_key: Dict[int, str] = {}
+        self.id_to_key: dict[int, str] = {}
         self.next_id = 0
 
 class MemoryCacheBackend(CacheBackend):
@@ -24,7 +22,7 @@ class MemoryCacheBackend(CacheBackend):
     def __init__(self, max_size: int = 1000, embedding_dim: int = 384):
         self.max_size = max_size
         self.embedding_dim = embedding_dim
-        self.namespaces: Dict[str, NamespaceCache] = {}
+        self.namespaces: dict[str, NamespaceCache] = {}
         self.lock = asyncio.Lock()
         
         if faiss is None:
@@ -35,7 +33,7 @@ class MemoryCacheBackend(CacheBackend):
             self.namespaces[namespace] = NamespaceCache(self.embedding_dim)
         return self.namespaces[namespace]
 
-    def _normalize(self, embedding: List[float]) -> np.ndarray:
+    def _normalize(self, embedding: list[float]) -> np.ndarray:
         """Normalize embedding for cosine similarity with IndexFlatIP."""
         vec = np.array(embedding, dtype=np.float32)
         norm = np.linalg.norm(vec)
@@ -43,7 +41,7 @@ class MemoryCacheBackend(CacheBackend):
             vec = vec / norm
         return vec.reshape(1, -1)
 
-    async def get_exact(self, namespace: str, key: str) -> Optional[CacheEntry]:
+    async def get_exact(self, namespace: str, key: str) -> CacheEntry | None:
         async with self.lock:
             ns = self._get_namespace(namespace)
             if key in ns.cache:
@@ -56,7 +54,7 @@ class MemoryCacheBackend(CacheBackend):
                 return entry
             return None
 
-    async def get_similar(self, namespace: str, embedding: List[float], threshold: float = 0.9) -> Optional[CacheEntry]:
+    async def get_similar(self, namespace: str, embedding: list[float], threshold: float = 0.9) -> CacheEntry | None:
         async with self.lock:
             ns = self._get_namespace(namespace)
             if len(ns.cache) == 0 or not embedding:

@@ -1,6 +1,6 @@
 import pytest
 import asyncio
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 from taut.core.config import (
     TautConfig, 
     SemanticCacheConfig, 

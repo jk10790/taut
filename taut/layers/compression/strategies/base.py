@@ -1,5 +1,5 @@
 import abc
-from typing import Any, Dict
+from typing import Any
 from pydantic import BaseModel
 
 class CompressionResult(BaseModel):
@@ -8,7 +8,7 @@ class CompressionResult(BaseModel):
     compressed_text: str
     original_size: int
     compressed_size: int
-    metadata: Dict[str, Any] = {}
+    metadata: dict[str, Any] = {}
 
     @property
     def ratio(self) -> float:

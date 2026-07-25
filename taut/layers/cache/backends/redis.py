@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import logging
 import time
-from typing import Any, List, Optional
 
 from taut.layers.cache.backends.base import CacheBackend, CacheEntry
 
@@ -17,7 +16,9 @@ class RedisBackend(CacheBackend):
             import redis.asyncio as redis
             self.redis_module = redis
         except ImportError:
-            raise ImportError("redis[search] is required for RedisBackend. Run `pip install taut[redis]`")
+            raise ImportError(
+                "redis[search] is required for RedisBackend. Run `pip install taut[redis]`"
+            ) from None
             
         self.client = self.redis_module.Redis.from_url(redis_url)
         self.index_name = "taut_cache_idx"
@@ -31,10 +32,10 @@ class RedisBackend(CacheBackend):
             return
             
         try:
-            from redis.commands.search.field import VectorField, TextField, NumericField, TagField
+            from redis.commands.search.field import NumericField, TagField, VectorField
             from redis.commands.search.indexDefinition import IndexDefinition, IndexType
         except ImportError:
-            raise ImportError("redis[search] is required. Run `pip install taut[redis]`")
+            raise ImportError("redis[search] is required. Run `pip install taut[redis]`") from None
 
         try:
             await self.client.ft(self.index_name).info()
@@ -60,7 +61,7 @@ class RedisBackend(CacheBackend):
         
         self._index_ensured = True
             
-    async def get_exact(self, namespace: str, key: str) -> Optional[CacheEntry]:
+    async def get_exact(self, namespace: str, key: str) -> CacheEntry | None:
         """Get an exact match by hash (key)."""
         await self._ensure_index()
         redis_key = f"taut:cache:{namespace}:{key}"
@@ -74,7 +75,7 @@ class RedisBackend(CacheBackend):
             
         return None
 
-    async def get_similar(self, namespace: str, embedding: List[float], threshold: float = 0.9) -> Optional[CacheEntry]:
+    async def get_similar(self, namespace: str, embedding: list[float], threshold: float = 0.9) -> CacheEntry | None:
         """Get a semantic match using vector search."""
         await self._ensure_index()
         import numpy as np

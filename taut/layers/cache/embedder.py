@@ -1,6 +1,5 @@
 """Embedder interface for semantic caching."""
 from abc import ABC, abstractmethod
-from typing import Any
 
 class Embedder(ABC):
     @abstractmethod
@@ -29,8 +28,7 @@ class ONNXEmbedder(Embedder):
                 raise ImportError(
                     "ONNX backend dependencies are missing. "
                     "Install with `pip install taut[cache]`."
-                )
-            import os
+                ) from None
             
             # Using huggingface_hub to download ONNX model and tokenizers
             model_path = huggingface_hub.hf_hub_download(repo_id=self._model_name, filename="onnx/model.onnx")

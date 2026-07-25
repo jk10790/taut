@@ -1,10 +1,11 @@
 """Registry for extensible compression plugins."""
-from typing import Callable, List, Dict, Any
+from typing import Any
+from collections.abc import Callable
 
 class CompressionRegistry:
     """Registry to store user-defined compression plugins based on MIME type or heuristic matching."""
     
-    _plugins: List[Dict[str, Any]] = []
+    _plugins: list[dict[str, Any]] = []
     
     @classmethod
     def register(cls, mime_type: str, matcher: Callable[[str], bool] | None = None) -> Callable:

@@ -81,13 +81,18 @@ class TautConfig(BaseModel):
         kwargs = {
             "provider": os.getenv("TAUT_PROVIDER", "litellm"),
         }
-        if os.getenv("TAUT_API_KEY"): kwargs["api_key"] = os.getenv("TAUT_API_KEY")
-        if os.getenv("TAUT_BASE_URL"): kwargs["base_url"] = os.getenv("TAUT_BASE_URL")
-        if os.getenv("TAUT_DEFAULT_MODEL"): kwargs["default_model"] = os.getenv("TAUT_DEFAULT_MODEL")
+        if os.getenv("TAUT_API_KEY"):
+            kwargs["api_key"] = os.getenv("TAUT_API_KEY")
+        if os.getenv("TAUT_BASE_URL"):
+            kwargs["base_url"] = os.getenv("TAUT_BASE_URL")
+        if os.getenv("TAUT_DEFAULT_MODEL"):
+            kwargs["default_model"] = os.getenv("TAUT_DEFAULT_MODEL")
         
         cache_config = SemanticCacheConfig()
-        if os.getenv("TAUT_CACHE_BACKEND"): cache_config.backend = os.getenv("TAUT_CACHE_BACKEND")  # type: ignore
-        if os.getenv("TAUT_EMBEDDING_MODEL"): cache_config.embedding_model = os.getenv("TAUT_EMBEDDING_MODEL")  # type: ignore
+        if os.getenv("TAUT_CACHE_BACKEND"):
+            cache_config.backend = os.getenv("TAUT_CACHE_BACKEND")  # type: ignore[assignment]
+        if os.getenv("TAUT_EMBEDDING_MODEL"):
+            cache_config.embedding_model = os.getenv("TAUT_EMBEDDING_MODEL")  # type: ignore[assignment]
         kwargs["cache"] = cache_config
         
         kwargs["compression"] = CompressionConfig()
