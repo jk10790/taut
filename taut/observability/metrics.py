@@ -92,7 +92,7 @@ class MetricsCollector:
             f"│ Total Requests          │ {total_reqs:>12,} │",
             f"│ Cache Hit Rate          │ {hit_rate:>11.1%} │",
             f"│ Total Tokens Saved      │ {tokens_saved:>12,} │",
-            f"│ Estimated Cost Saved    │ ${cost_saved:>11.2f} │",
+            f"│ Estimated Cost Saved    │ ${cost_saved:>11.4f} │",
         ]
         if dist:
             lines.append("│ Model Distribution      │              │")

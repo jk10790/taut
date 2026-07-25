@@ -14,13 +14,13 @@ class MockPolicy(RestraintPolicy):
     def name(self) -> str:
         return "mock"
         
-    def get_instructions(self) -> str:
+    def get_instructions(self, context=None) -> str:
         return "BE MOCK"
-        
-    def get_max_tokens(self) -> int | None:
+
+    def get_max_tokens(self, context=None) -> int | None:
         return 42
-        
-    def get_response_format(self, provider: str | None = None) -> dict | None:
+
+    def get_response_format(self, provider: str | None = None, context=None) -> dict | None:
         return {"type": "json_object"}
 
 @pytest.mark.asyncio

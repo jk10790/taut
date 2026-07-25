@@ -30,21 +30,38 @@ class HeuristicClassifier:
         
         # 2. Text complexity factor
         text_content = ""
-        
+
         if request.system_prompt:
             text_content += request.system_prompt
-            
+
         if request.messages:
             for msg in request.messages:
                 if isinstance(msg.content, str):
                     text_content += "\n" + msg.content
-                    
+
+        # request.context carries the bulk payload (log dumps, JSON arrays,
+        # repository slices) and must be scored. Omitting it meant a 20KB
+        # context scored 0.0 and routed to the cheapest tier -- which in turn
+        # tripped skip_for_simple_tier and disabled compression, so the two
+        # savings layers were both bypassed for precisely the large-payload
+        # requests taut exists to optimise.
+        if request.context:
+            if isinstance(request.context, str):
+                text_content += "\n" + request.context
+            else:
+                text_content += "\n" + "\n".join(
+                    getattr(block, "content", "") for block in request.context
+                )
+
         # Token estimation (using fallback model)
         try:
-            # We assume a 40% token reduction if content is code or json
+            # Code and JSON compress hard downstream, so their raw token count
+            # overstates what will actually be sent. Discount accordingly.
+            # (Compared lowercase: the detector returns 'json'/'code', so the
+            # previous uppercase comparison never matched.)
             content_type = self.detector.detect(text_content)
             raw_tokens = litellm.token_counter(model="gpt-3.5-turbo", text=text_content)
-            if content_type in ["JSON", "CODE"]:
+            if content_type in ("json", "code"):
                 estimated_tokens = int(raw_tokens * 0.6)
             else:
                 estimated_tokens = raw_tokens

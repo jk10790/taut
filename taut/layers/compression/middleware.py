@@ -4,6 +4,7 @@ from collections.abc import Callable
 from taut.core.middleware import Middleware
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext, LayerMetrics
 from taut.core.config import CompressionConfig
+from taut.core.tokens import count_message_tokens, count_tokens
 
 from .detector import ContentDetector
 from .registry import CompressionRegistry
@@ -25,14 +26,17 @@ class CompressionMiddleware(Middleware):
         self._prose_compressor = ProseCompressor()
 
     def _estimate_tokens(self, request: LLMRequest) -> int:
-        # Simple heuristic for metrics: 4 chars per token
+        """Count request tokens with a real tokenizer.
+
+        This number is what surfaces as "tokens saved" on /v1/taut/metrics, so
+        it uses the model's actual tokenizer rather than a chars/4 heuristic.
+        """
+        model = request.model
         total = 0
         if getattr(request, 'context', None) and isinstance(request.context, str):
-            total += len(request.context) // 4
+            total += count_tokens(request.context, model)
         if getattr(request, 'messages', None):
-            for msg in request.messages:
-                if isinstance(msg.content, str):
-                    total += len(msg.content) // 4
+            total += count_message_tokens(request.messages, model)
         return total
 
     def _apply_strategy(self, text: str, content_type: str, context: PipelineContext) -> str:
@@ -145,7 +149,7 @@ class CompressionMiddleware(Middleware):
     def _transform_request(self, request: LLMRequest, context: PipelineContext):
         # Compress context
         if getattr(request, 'context', None) and isinstance(request.context, str):
-            if len(request.context) // 4 > getattr(self._config, 'min_compress_tokens', 500):
+            if count_tokens(request.context, request.model) > self._config.min_compress_tokens:
                 ct = self._detector.detect(request.context)
                 context.content_types_detected["context"] = ct
                 request.context = self._apply_strategy(request.context, ct, context)
@@ -153,7 +157,7 @@ class CompressionMiddleware(Middleware):
         # Compress messages
         if getattr(request, 'messages', None):
             for i, msg in enumerate(request.messages):
-                if isinstance(msg.content, str) and (len(msg.content) // 4) > getattr(self._config, 'min_compress_tokens', 500):
+                if isinstance(msg.content, str) and count_tokens(msg.content, request.model) > self._config.min_compress_tokens:
                     ct = self._detector.detect(msg.content)
                     context.content_types_detected[f"msg_{i}"] = ct
                     msg.content = self._apply_strategy(msg.content, ct, context)

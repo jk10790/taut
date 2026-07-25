@@ -26,7 +26,10 @@ class ContentBlock(BaseModel):
 
 class LLMRequest(BaseModel):
     """Canonical request model for the taut pipeline."""
-    intent: str
+    # Defaults to empty so the PromptBlock API is usable on its own: when a
+    # request is built from blocks, the pipeline derives `intent` from the
+    # QueryBlock. Callers using messages/context directly may still set it.
+    intent: str = ""
     context: str | list[ContentBlock] | None = None
     messages: list[Message] | None = None
     blocks: list[PromptBlock] | None = None
