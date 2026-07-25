@@ -30,3 +30,12 @@ def pytest_collection_modifyitems(config, items):
                     )
         if "tests/e2e/" in str(item.fspath).replace("\\", "/"):
             item.add_marker(pytest.mark.e2e)
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--update-baseline",
+        action="store_true",
+        default=False,
+        help="Rewrite tests/benchmarks/baseline.json from this run's measurements.",
+    )
