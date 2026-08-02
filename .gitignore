@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Local secrets. Fidelity recording reads API keys from here; never commit it.
+.env
+.env.local
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test / coverage artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.benchmarks/
+
+# Tooling caches
+.ruff_cache/
+.mypy_cache/
+
+# Local model / embedding caches
+.cache/
+*.onnx
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+.agents
+.claude

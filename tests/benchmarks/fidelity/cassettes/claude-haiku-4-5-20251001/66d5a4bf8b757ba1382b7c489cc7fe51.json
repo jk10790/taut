@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "code.safe_load_failure[compressed]",
+  "request_key": "66d5a4bf8b757ba1382b7c489cc7fe51",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What does safe_load return when the text is not valid JSON?",
+  "request_message_count": 0,
+  "response": {
+    "content": "An empty dictionary `{}`",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 145,
+      "output_tokens": 9
+    }
+  }
+}

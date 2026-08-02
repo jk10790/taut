@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "code.default_retries[compressed]",
+  "request_key": "bbf1f67e406d0254a4b49bc705ab35e3",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What is the default value of max_retries?",
+  "request_message_count": 0,
+  "response": {
+    "content": "3",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 248,
+      "output_tokens": 1
+    }
+  }
+}

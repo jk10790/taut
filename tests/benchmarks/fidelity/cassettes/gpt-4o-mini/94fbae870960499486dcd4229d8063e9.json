@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.biggest_qty_sku[raw]",
+  "request_key": "94fbae870960499486dcd4229d8063e9",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Which SKU has the highest qty?",
+  "request_message_count": 0,
+  "response": {
+    "content": "SKU-00080",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3855,
+      "output_tokens": 4
+    }
+  }
+}

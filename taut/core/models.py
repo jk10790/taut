@@ -4,7 +4,7 @@ import time
 from typing import Any, Literal
 from uuid import uuid4
 from pydantic import BaseModel, ConfigDict, Field, PrivateAttr, model_validator
-from typing_extensions import Self
+from typing import Self
 
 from taut.core.prompt_blocks import PromptBlock
 
@@ -26,7 +26,10 @@ class ContentBlock(BaseModel):
 
 class LLMRequest(BaseModel):
     """Canonical request model for the taut pipeline."""
-    intent: str
+    # Defaults to empty so the PromptBlock API is usable on its own: when a
+    # request is built from blocks, the pipeline derives `intent` from the
+    # QueryBlock. Callers using messages/context directly may still set it.
+    intent: str = ""
     context: str | list[ContentBlock] | None = None
     messages: list[Message] | None = None
     blocks: list[PromptBlock] | None = None

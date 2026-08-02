@@ -2,7 +2,6 @@ import pytest
 import json
 from fastapi.testclient import TestClient
 from taut.proxy.server import app
-from taut.core.pipeline import Pipeline
 from taut.core.models import LLMResponse, PipelineMetrics
 from unittest.mock import MagicMock
 

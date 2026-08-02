@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.top_region[raw]",
+  "request_key": "800cacc0f53c28d4d8990cf3070a8dc7",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Which region appears most often?",
+  "request_message_count": 0,
+  "response": {
+    "content": "eu-west-2",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 7682,
+      "output_tokens": 8
+    }
+  }
+}

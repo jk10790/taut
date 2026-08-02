@@ -1,5 +1,6 @@
 import litellm
-from typing import AsyncIterator, Any
+from typing import Any
+from collections.abc import AsyncIterator
 from taut.providers.base import BaseProvider
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext, TokenUsage
 
@@ -52,7 +53,8 @@ class LiteLLMProvider(BaseProvider):
         try:
             if self.fallback_models:
                 base_params = {"api_key": self.api_key} if self.api_key else {}
-                if self.base_url: base_params["api_base"] = self.base_url
+                if self.base_url:
+                    base_params["api_base"] = self.base_url
                 model_list = [{"model_name": model, "litellm_params": {"model": model, **base_params}}]
                 model_list += [{"model_name": m, "litellm_params": {"model": m, **base_params}} for m in self.fallback_models]
                 router = litellm.Router(model_list=model_list)
@@ -123,7 +125,8 @@ class LiteLLMProvider(BaseProvider):
 
         if self.fallback_models:
             base_params = {"api_key": self.api_key} if self.api_key else {}
-            if self.base_url: base_params["api_base"] = self.base_url
+            if self.base_url:
+                base_params["api_base"] = self.base_url
             model_list = [{"model_name": model, "litellm_params": {"model": model, **base_params}}]
             model_list += [{"model_name": m, "litellm_params": {"model": m, **base_params}} for m in self.fallback_models]
             router = litellm.Router(model_list=model_list)

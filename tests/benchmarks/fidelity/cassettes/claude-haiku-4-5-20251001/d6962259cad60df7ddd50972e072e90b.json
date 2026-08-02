@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.slowest_event[raw]",
+  "request_key": "d6962259cad60df7ddd50972e072e90b",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Which event_id has the highest latency_ms?",
+  "request_message_count": 0,
+  "response": {
+    "content": "74",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 7687,
+      "output_tokens": 5
+    }
+  }
+}

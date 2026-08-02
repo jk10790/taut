@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import AsyncIterator
+from collections.abc import AsyncIterator
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext
 
 class BaseProvider(ABC):

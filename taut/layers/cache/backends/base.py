@@ -1,16 +1,16 @@
 import abc
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 from pydantic import BaseModel, Field
 
 class CacheEntry(BaseModel):
     """Represents an entry in the cache."""
     key: str
     value: Any
-    embedding: Optional[List[float]] = None
+    embedding: list[float] | None = None
     created_at: float = Field(default_factory=time.time)
-    ttl: Optional[float] = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    ttl: float | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     @property
     def is_expired(self) -> bool:
@@ -23,12 +23,12 @@ class CacheBackend(abc.ABC):
     """Abstract base class for cache backends."""
 
     @abc.abstractmethod
-    async def get_exact(self, namespace: str, key: str) -> Optional[CacheEntry]:
+    async def get_exact(self, namespace: str, key: str) -> CacheEntry | None:
         """Retrieve an entry by exact key match."""
         pass
 
     @abc.abstractmethod
-    async def get_similar(self, namespace: str, embedding: List[float], threshold: float = 0.9) -> Optional[CacheEntry]:
+    async def get_similar(self, namespace: str, embedding: list[float], threshold: float = 0.9) -> CacheEntry | None:
         """Retrieve an entry by semantic similarity."""
         pass
 

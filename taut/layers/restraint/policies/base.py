@@ -1,4 +1,8 @@
 """Base class for output restraint policies."""
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from taut.core.models import PipelineContext
 from abc import ABC, abstractmethod
 from typing import Any
 from taut.core.config import OutputRestraintConfig

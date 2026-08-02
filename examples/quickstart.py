@@ -21,7 +21,8 @@ async def main():
         compression=taut.CompressionConfig(
             json=True,
             code=True,
-            skip_for_simple_tier=False # Force compression for the demo
+            min_compress_tokens=10,     # this demo's payloads are small
+            skip_for_simple_tier=False  # force compression for the demo
         )
     )
     pipeline = taut.create_pipeline(config)

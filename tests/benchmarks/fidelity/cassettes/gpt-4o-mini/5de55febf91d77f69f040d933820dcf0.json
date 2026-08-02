@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.count_500[compressed]",
+  "request_key": "5de55febf91d77f69f040d933820dcf0",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. How many events have status_code 500?",
+  "request_message_count": 0,
+  "response": {
+    "content": "20",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3719,
+      "output_tokens": 1
+    }
+  }
+}

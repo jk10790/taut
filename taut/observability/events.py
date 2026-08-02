@@ -3,7 +3,8 @@ import asyncio
 import logging
 import threading
 from collections import defaultdict
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
 logger = logging.getLogger("taut.events")
 

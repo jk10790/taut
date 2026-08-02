@@ -2,11 +2,9 @@
 import asyncio
 import logging
 import time
-from typing import Callable, AsyncIterator
+from collections.abc import Callable, AsyncIterator
 
 from taut.core.config import (
-    SemanticCacheConfig, CompressionConfig, 
-    PrefixAlignmentConfig, TieredRoutingConfig, OutputRestraintConfig,
     TautConfig
 )
 from taut.core.middleware import Middleware
@@ -14,7 +12,13 @@ from taut.core.models import LLMRequest, LLMResponse, PipelineContext
 from taut.observability.metrics import MetricsCollector
 from taut.observability.events import EventBus
 from taut.providers.base import BaseProvider
-from taut.core.resilience import with_retries, ProviderBusyException, FallbackExhaustedError
+from taut.core.resilience import (
+    CircuitBreaker,
+    FallbackExhaustedError,
+    ProviderBusyException,
+    RateLimiter,
+    with_retries,
+)
 
 logger = logging.getLogger("taut.pipeline")
 
@@ -27,20 +31,36 @@ class Pipeline:
         provider: BaseProvider,
         metrics_collector: MetricsCollector | None = None,
         event_bus: EventBus | None = None,
+        rate_limiter: "RateLimiter | None" = None,
+        circuit_breaker: "CircuitBreaker | None" = None,
+        acquire_timeout: float | None = None,
     ):
         self._middlewares = middlewares
         self._provider = provider
         self._metrics = metrics_collector or MetricsCollector()
         self._events = event_bus or EventBus()
+        self._rate_limiter = rate_limiter
+        self._circuit_breaker = circuit_breaker
+        self._acquire_timeout = acquire_timeout
     
     def _convert_blocks_to_messages(self, request: LLMRequest):
         """Convert PromptBlocks to Messages at start of processing."""
         if hasattr(request, "blocks") and request.blocks:
             from taut.core.models import Message
-            from taut.core.prompt_blocks import SystemBlock, ToolsBlock
+            from taut.core.prompt_blocks import QueryBlock, SystemBlock, ToolsBlock
             if request.messages is None:
                 request.messages = []
-            
+
+            # Derive the cache intent from the QueryBlock before the blocks are
+            # flattened away. Without this the semantic cache falls back to
+            # embedding repr(request) -- the entire prompt including static
+            # boilerplate -- which is exactly the dilution that causes false
+            # semantic hits when the query is short and the system prompt long.
+            if not request.intent:
+                queries = [b.content for b in request.blocks if isinstance(b, QueryBlock)]
+                if queries:
+                    request.intent = "\n".join(queries)
+
             for block in request.blocks:
                 role = "system" if isinstance(block, SystemBlock) else "user"
                 msg = Message(
@@ -81,8 +101,9 @@ class Pipeline:
         context.metrics.total_tokens_saved = sum(
             lm.tokens_saved for lm in context.metrics.layers
         )
+        self._compute_costs(context, response)
         response.metrics = context.metrics
-        
+
         # Record and emit
         self._metrics.record(context.metrics)
         await self._events.emit(
@@ -96,10 +117,57 @@ class Pipeline:
         
         return response
     
+    def _compute_costs(self, context: PipelineContext, response: LLMResponse) -> None:
+        """Populate the estimated_cost_* metrics.
+
+        The counterfactual ("without taut") is the same request billed at the
+        model the caller would have used, with the pre-compression token count.
+        Where taut changed nothing, the two costs are equal and savings are
+        zero -- which is the honest answer, not a flattering one.
+        """
+        from taut.observability.pricing import estimate_cost, is_priced
+
+        metrics = context.metrics
+        actual_in = getattr(response.usage, "input_tokens", 0) or 0
+        actual_out = getattr(response.usage, "output_tokens", 0) or 0
+        used_model = response.model or context.selected_model
+
+        # Baseline model: whatever routing displaced, else the model we used.
+        baseline_model = used_model
+        for layer in metrics.layers:
+            if layer.layer_name == "tiered_routing":
+                baseline_model = layer.details.get("original_model") or used_model
+                break
+
+        # Baseline input tokens: pre-compression count when compression ran.
+        baseline_in = actual_in
+        for layer in metrics.layers:
+            if layer.layer_name == "compression" and layer.applied and layer.tokens_before:
+                baseline_in = max(actual_in, layer.tokens_before)
+                break
+
+        if metrics.cache_hit:
+            # Nothing was sent upstream, so the whole counterfactual is saved.
+            metrics.estimated_cost_with_taut = 0.0
+            metrics.estimated_cost_without_taut = estimate_cost(baseline_model, baseline_in, actual_out)
+        else:
+            metrics.estimated_cost_with_taut = estimate_cost(used_model, actual_in, actual_out)
+            metrics.estimated_cost_without_taut = estimate_cost(baseline_model, baseline_in, actual_out)
+
+        if not is_priced(baseline_model) and not is_priced(used_model):
+            # No pricing data for either side: leave savings at zero instead of
+            # reporting a difference between two unknowns.
+            metrics.estimated_cost_saved = 0.0
+            return
+
+        metrics.estimated_cost_saved = max(
+            0.0, metrics.estimated_cost_without_taut - metrics.estimated_cost_with_taut
+        )
+
     def run_sync(self, request: LLMRequest) -> LLMResponse:
         """Synchronous wrapper for run()."""
         try:
-            loop = asyncio.get_running_loop()
+            asyncio.get_running_loop()
         except RuntimeError:
             return asyncio.run(self.run(request))
         else:
@@ -195,11 +263,23 @@ class Pipeline:
         if not models_to_try:
             models_to_try = ["unknown"]
 
+        # Backpressure: acquire capacity before spending it upstream. Raises
+        # CapacityExceededError on timeout so the caller's orchestrator can
+        # queue the job -- the contract documented in docs/limitations.md.
+        if self._rate_limiter is not None:
+            await self._rate_limiter.acquire(timeout=self._acquire_timeout)
+
         last_error = None
+        skipped_open: list[str] = []
         for model in models_to_try:
+            if self._circuit_breaker is not None and not await self._circuit_breaker.allows(model):
+                logger.info("Circuit open for %s; skipping without calling", model)
+                skipped_open.append(model)
+                continue
+
             request.model = model
             context.selected_model = model
-            
+
             # Decorate the inner call with retries for transient errors
             @with_retries(max_retries=getattr(self._provider, 'num_retries', 2), exceptions=(ProviderBusyException, TimeoutError))
             async def _do_call():
@@ -213,12 +293,20 @@ class Pipeline:
 
             try:
                 response = await _do_call()
+                if self._circuit_breaker is not None:
+                    await self._circuit_breaker.record_success(model)
                 context.metrics.model_used = response.model
                 return response
             except Exception as e:
+                if self._circuit_breaker is not None:
+                    await self._circuit_breaker.record_failure(model)
                 logger.warning(f"Model {model} failed: {e}. Trying next fallback...")
                 last_error = e
 
+        if last_error is None and skipped_open:
+            raise FallbackExhaustedError(
+                f"All candidate models have open circuits: {', '.join(skipped_open)}"
+            )
         raise FallbackExhaustedError(f"All models failed. Last error: {last_error}") from last_error
     
     def _wrap_middleware(self, mw: Middleware, next_handler: Callable):
@@ -299,10 +387,29 @@ def create_pipeline(config: TautConfig | None = None, **kwargs) -> Pipeline:
     if config.restraint is not None:
         from taut.layers.restraint.middleware import OutputRestraintMiddleware
         middlewares.append(OutputRestraintMiddleware(config=config.restraint))
-    
+
+    resilience = config.resilience
+    rate_limiter = None
+    if resilience.requests_per_second:
+        rate_limiter = RateLimiter(
+            tokens_per_second=resilience.requests_per_second,
+            capacity=resilience.burst or resilience.requests_per_second,
+        )
+    circuit_breaker = (
+        CircuitBreaker(
+            failure_threshold=resilience.circuit_failure_threshold,
+            reset_timeout=resilience.circuit_reset_timeout,
+        )
+        if resilience.circuit_breaker_enabled
+        else None
+    )
+
     return Pipeline(
         middlewares=middlewares,
         provider=llm_provider,
+        rate_limiter=rate_limiter,
+        circuit_breaker=circuit_breaker,
+        acquire_timeout=resilience.acquire_timeout,
     )
 
 

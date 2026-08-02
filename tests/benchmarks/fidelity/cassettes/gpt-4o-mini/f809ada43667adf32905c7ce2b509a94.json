@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "code.raises_on_short_seat[raw]",
+  "request_key": "f809ada43667adf32905c7ce2b509a94",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What exception class is raised when the seat identifier is too short?",
+  "request_message_count": 0,
+  "response": {
+    "content": "ValueError",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 544,
+      "output_tokens": 2
+    }
+  }
+}

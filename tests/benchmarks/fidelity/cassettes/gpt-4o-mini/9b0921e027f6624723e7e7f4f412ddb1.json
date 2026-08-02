@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "faq.scim_on_growth[raw]",
+  "request_key": "9b0921e027f6624723e7e7f4f412ddb1",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Is SCIM provisioning available on the Growth plan? Yes or no.",
+  "request_message_count": 0,
+  "response": {
+    "content": "No.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 403,
+      "output_tokens": 2
+    }
+  }
+}

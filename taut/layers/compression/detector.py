@@ -50,17 +50,26 @@ class ContentDetector:
             if p["matcher"] and p["matcher"](text):
                 return p["mime_type"]
                 
-        # 2. Built-in heuristics
+        # 2. Built-in heuristics.
+        #
+        # Order matters. is_code() is the strict test -- it requires BOTH
+        # structural markers (a def/class signature, or an indented control
+        # keyword) AND a successful ast.parse(). is_prose() is the loose test:
+        # ">5 words over >1 sentence" matches almost anything, including source
+        # code, because attribute access (`item.get`) reads as a sentence
+        # boundary. Running the loose test first sent essentially all bare
+        # source code down the prose path, leaving the AST compressor
+        # unreachable outside fenced blocks. Strict before loose.
         if ContentDetector.is_json(text):
             return "json"
-            
+
         if re.search(r'```', text):
             return "mixed"
-            
-        if ContentDetector.is_prose(text):
-            return "prose"
-            
+
         if ContentDetector.is_code(text):
             return "code"
-            
+
+        if ContentDetector.is_prose(text):
+            return "prose"
+
         return "prose"

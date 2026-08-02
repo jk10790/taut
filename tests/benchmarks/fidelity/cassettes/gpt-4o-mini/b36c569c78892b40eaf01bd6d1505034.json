@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "code.safe_load_failure[compressed]",
+  "request_key": "b36c569c78892b40eaf01bd6d1505034",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What does safe_load return when the text is not valid JSON?",
+  "request_message_count": 0,
+  "response": {
+    "content": "{}",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 129,
+      "output_tokens": 1
+    }
+  }
+}

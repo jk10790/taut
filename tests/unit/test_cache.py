@@ -1,5 +1,4 @@
 import pytest
-import pytest_asyncio
 import numpy as np
 import time
 from unittest.mock import AsyncMock, MagicMock
@@ -36,7 +35,7 @@ def mock_embedder():
 @pytest.fixture
 def memory_backend():
     try:
-        import faiss
+        import faiss  # noqa: F401
     except ImportError:
         pytest.skip("faiss not installed")
     return MemoryCacheBackend(max_size=10, embedding_dim=384)

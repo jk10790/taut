@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.priciest_sku[raw]",
+  "request_key": "5c041c06827397e69243204d4fa2519c",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Which SKU has the highest unit_price?",
+  "request_message_count": 0,
+  "response": {
+    "content": "SKU-00076",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3688,
+      "output_tokens": 8
+    }
+  }
+}

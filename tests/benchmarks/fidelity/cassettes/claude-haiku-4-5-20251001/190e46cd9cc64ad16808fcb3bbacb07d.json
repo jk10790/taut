@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.count_archived[raw]",
+  "request_key": "190e46cd9cc64ad16808fcb3bbacb07d",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. How many items have status \"archived\"?",
+  "request_message_count": 0,
+  "response": {
+    "content": "26",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3686,
+      "output_tokens": 5
+    }
+  }
+}

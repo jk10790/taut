@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.lookup_latency[raw]",
+  "request_key": "35140fbcd9c325c9b7bcc233d25d44de",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What is the latency_ms of event_id 57?",
+  "request_message_count": 0,
+  "response": {
+    "content": "553.39",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 7669,
+      "output_tokens": 3
+    }
+  }
+}

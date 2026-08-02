@@ -1,108 +1,193 @@
 # Integration & Best Practices
 
-`taut` supports two distinct integration paths depending on your architectural needs. We built it to be as frictionless as possible.
+Two integration paths: run `taut` as a proxy, or embed it as a library.
+
+Every Python example on this page is executed by
+`tests/claims/test_docs_examples.py`, and every symbol it references is checked
+against the package. If an example here stops working, CI fails.
 
 ---
 
-## 1. The Proxy Server (Drop-In Magic)
+## 1. The Proxy Server
 
-The easiest way to integrate `taut` into LangChain, Node.js, Go, Rust, or Ruby applications is by running it as a **FastAPI Proxy**. It perfectly mimics the standard OpenAI API—zero refactoring required.
+The easiest path for LangChain, Node.js, Go, Rust or Ruby applications. The
+proxy exposes an OpenAI-compatible API, so pointing an existing client at it is
+the only change required.
 
-### Starting the Server
+### Install and start
+
 ```bash
+# The proxy needs FastAPI and uvicorn from the `proxy` extra.
+pip install -e ".[cache,proxy]"
+
 python -m taut.proxy.server --port 8000
 ```
 
-### Updating Your Client
-Just change your application's base URL to point to the proxy:
+### Point your client at it
 
 ```python
 from openai import OpenAI
 
 client = OpenAI(
     api_key="your-api-key",
-    base_url="http://localhost:8000/v1" # Point to taut!
+    base_url="http://localhost:8000/v1",
 )
-# Streaming (SSE) is fully supported, cache playback included!
 ```
+
+Streaming works: set `stream=True` and responses arrive as server-sent events,
+including on a cache hit, which is replayed chunk by chunk.
 
 ---
 
-## 2. Python Library (The Power User API)
+## 2. Python Library
 
-For tight integration where you want to orchestrate the exact prompts, you can embed `taut` directly inside your Python application. We've unified the exports so you can grab what you need directly from `taut.__init__.py`.
+For tighter control over prompt assembly.
 
 ```python
 import asyncio
+
 from taut import (
-    TautConfig, SemanticCache, TieredRoutingConfig, Compression,
-    LLMRequest, SystemBlock, ContextBlock, QueryBlock,
-    create_pipeline, CapacityExceededError
+    CapacityExceededError,
+    CompressionConfig,
+    ContextBlock,
+    LLMRequest,
+    QueryBlock,
+    SemanticCacheConfig,
+    SystemBlock,
+    TautConfig,
+    TieredRoutingConfig,
+    create_pipeline,
 )
+
 
 async def main():
     config = TautConfig(
         provider="litellm",
         num_retries=3,
         timeout=60.0,
-        fallback_models=["gpt-4o-mini", "groq/llama3"], # Seamless failovers!
-        cache=SemanticCache(backend="redis", redis_url="redis://localhost:6379"),
+        fallback_models=["gpt-4o-mini"],
+        cache=SemanticCacheConfig(backend="memory", similarity_threshold=0.95),
         routing=TieredRoutingConfig(),
-        compression=Compression(json=True, code=True)
+        compression=CompressionConfig(json=True, code=True),
     )
     pipeline = create_pipeline(config)
-    
+
     request = LLMRequest(
         blocks=[
             SystemBlock(content="You are a helpful assistant."),
             ContextBlock(content='[{"id": 1, "task": "read docs"}]'),
-            QueryBlock(content="Summarize these active items")
+            QueryBlock(content="Summarize these active items"),
         ],
         model="gpt-4o",
-        namespace="tenant_123"
+        namespace="tenant_123",
     )
-    
+
     try:
         response = await pipeline.run(request)
         print(response.content)
     except CapacityExceededError:
-        print("Compute is overwhelmed! Queueing job for later...")
+        print("Compute saturated; queue this job for later.")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+For Redis-backed caching in production, swap the cache config:
+
+```python
+from taut import SemanticCacheConfig
+
+cache = SemanticCacheConfig(
+    backend="redis",
+    redis_url="redis://localhost:6379",
+    similarity_threshold=0.95,
+)
+```
+
+Requires the `redis` extra: `pip install -e ".[redis]"`.
+
 ---
 
-## Best Practices for Maximum Efficiency
+## Best Practices
 
-### Avoiding Semantic Cache Collisions
-If you send your entire prompt (boilerplate + context + query) as a single `user` message, the Semantic Cache will embed the whole block. Since the boilerplate makes up 90% of the text, completely different queries might trigger a false cache hit!
+### Keep the query separate from the boilerplate
 
-**Solution:** Always maintain strict separation of concerns.
-- **Proxy Clients**: Separate your static boilerplate into the `system` role, and the dynamic query into the `user` role. `taut` builds its semantic cache key *exclusively* from the final `user` message.
-- **Python SDK Clients**: Use the modular `PromptBlock` API. `taut` zeroes in on the `QueryBlock` for the cache embedding.
+The semantic cache embeds the *dynamic* part of your request, not all of it. It
+finds that part in one of three ways, in order:
 
-### Utilizing the PromptBlock API
-`PromptBlock` lets you construct modular prompts to leverage the Prefix Alignment layer.
-- **`SystemBlock`**: Highest stability. Pinned to the top of the context window.
-- **`ContextBlock`**: Used for RAG chunks. Ordered but flexible.
-- **`QueryBlock`**: Lowest stability. Kept at the absolute bottom.
+1. `LLMRequest.intent`, if you set it.
+2. The `QueryBlock`, if you use the PromptBlock API.
+3. The last `user` message.
 
-### Enforcing Multi-Tenancy in the Proxy
-Prevent cache contamination by passing the `X-Taut-Namespace` header! If you don't enforce this, customer A might get customer B's cached data.
+If you concatenate boilerplate, context and question into a single user message,
+the boilerplate dominates the embedding and unrelated questions can collide
+above the similarity threshold. Keep static content in the `system` role or a
+`SystemBlock`.
+
+### Use the PromptBlock API for prefix alignment
+
+Blocks carry stability hints that drive prefix ordering:
+
+| Block | Stability | Placement |
+|---|---|---|
+| `SystemBlock` | immutable | pinned to the top |
+| `ToolsBlock` | stable | near the top |
+| `ContextBlock` | semi-stable | middle |
+| `QueryBlock` | dynamic | bottom, and used as the cache key |
+
+### Pass a namespace for every tenant
+
+Namespace isolation is enforced, but only on the value you pass. Omit it and
+every tenant shares the `default` namespace.
+
 ```bash
 curl http://localhost:8000/v1/chat/completions \
   -H "X-Taut-Namespace: tenant_123" \
+  -H "Content-Type: application/json" \
   -d '{"model": "gpt-4o", "messages": [{"role": "user", "content": "Query"}]}'
 ```
+
+Treat this as a security requirement. `taut` cannot infer tenancy.
+
+### Tune the similarity threshold against your own traffic
+
+The default of `0.95` is validated against the labelled pairs in
+`tests/benchmarks/test_cache_precision.py`. Your queries are not those queries.
+Add your own paraphrase and near-miss pairs and rerun
+`pytest tests/benchmarks -m bench` to see the precision/recall curve for your
+domain before lowering it.
+
+### Enable backpressure if local compute is the bottleneck
+
+```python
+from taut import TautConfig
+from taut.core.config import ResilienceConfig
+
+config = TautConfig(
+    resilience=ResilienceConfig(
+        requests_per_second=10,
+        burst=20,
+        acquire_timeout=5.0,
+    )
+)
+```
+
+Without `requests_per_second`, no limiter is installed and
+`CapacityExceededError` is never raised.
 
 ---
 
 ## Environment Variables
-If running as a proxy, configure `taut` using these environment variables:
-- `TAUT_PROVIDER`: LLM provider (default: `litellm`).
-- `TAUT_API_KEY`: Your provider API key.
-- `TAUT_DEFAULT_MODEL`: Default fallback model.
-- `TAUT_CACHE_BACKEND`: `redis` or `memory`.
-- `TAUT_ROUTING_TIERS`: JSON string mapping tier names to models.
+
+Used by the proxy when no config is passed explicitly:
+
+- `TAUT_PROVIDER` — LLM provider (default: `litellm`)
+- `TAUT_API_KEY` — provider API key
+- `TAUT_BASE_URL` — provider base URL
+- `TAUT_DEFAULT_MODEL` — model used when routing is disabled
+- `TAUT_CACHE_BACKEND` — `memory` or `redis`
+- `TAUT_EMBEDDING_MODEL` — ONNX embedding model id
+- `TAUT_ROUTING_TIERS` — JSON object mapping tier names to model lists
+- `TAUT_PROXY_HOST` — bind address (default: `127.0.0.1`)
+- `TAUT_PROXY_CORS_ORIGINS` — comma-separated CORS origins (default: `*`)

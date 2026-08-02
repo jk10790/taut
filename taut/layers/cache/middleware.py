@@ -1,13 +1,12 @@
 import asyncio
 import hashlib
 import logging
-from typing import Callable
+from collections.abc import Callable
 
 from taut.core.middleware import Middleware
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext, LayerMetrics
 from taut.core.config import SemanticCacheConfig
 from .backends.base import CacheBackend, CacheEntry
-from .embedder import Embedder
 
 logger = logging.getLogger("taut.cache")
 
@@ -42,9 +41,32 @@ class SemanticCacheMiddleware(Middleware):
         return hashlib.sha256(prompt.encode('utf-8')).hexdigest()
         
     def _cache_text(self, request: LLMRequest) -> str:
-        # Strictly embed only the intent to prevent semantic collisions
+        """Return the text the cache key and embedding are built from.
+
+        Only the dynamic part of the prompt is used. Embedding the whole
+        request would let a large static system prompt dominate the vector, so
+        two unrelated queries sharing boilerplate could land above the
+        similarity threshold and serve each other's answers.
+        """
         if getattr(request, 'intent', None):
             return request.intent
+
+        # No explicit intent: fall back to the last user turn, which is the
+        # dynamic part of a chat-shaped request.
+        for msg in reversed(request.messages or []):
+            if msg.role == "user":
+                if isinstance(msg.content, str):
+                    return msg.content
+                text_parts = [
+                    part.get("text", "")
+                    for part in msg.content
+                    if isinstance(part, dict) and part.get("type") == "text"
+                ]
+                if text_parts:
+                    return "\n".join(text_parts)
+
+        # Nothing dynamic to key on. Use the full request rather than risk
+        # collapsing distinct requests onto one key.
         return str(request)
 
     async def _embed_text(self, text: str) -> list[float]:

@@ -1,42 +1,156 @@
+"""Measured compression benchmarks against the checked-in corpus.
+
+This file previously contained five test functions whose bodies were all
+`pass`, while the README advertised "40-80% reduction". These benchmarks
+produce the numbers the documentation is allowed to quote.
+
+Run with:  pytest tests/benchmarks -m bench
+Refresh :  pytest tests/benchmarks -m bench --update-baseline
+
+Everything here is deterministic: a fixed corpus, a real tokenizer, and no
+network. Nothing in this file calls a provider or spends money -- the
+fidelity benchmark that does is marked `costly` and lives in test_fidelity.py.
+"""
+import json
+import pathlib
+
 import pytest
-from taut.core.models import LLMRequest, PipelineContext
-from taut.core.config import TautConfig
-from taut.core.pipeline import create_pipeline
 
-@pytest.fixture
-def sample_json():
-    import json
-    # A realistic, compressible payload
-    return json.dumps([{"id": i, "name": f"Item {i}", "value": i*1.5, "status": "active"} for i in range(1000)])
+from taut.core.tokens import count_tokens
+from taut.layers.compression.detector import ContentDetector
+from taut.layers.compression.strategies.code_compressor import CodeCompressor
+from taut.layers.compression.strategies.json_crusher import SmartCrusher
+from taut.layers.compression.strategies.prose_compressor import ProseCompressor
 
-@pytest.fixture
-def sample_code():
-    return "\n".join([f"def func_{i}():\n    '''This is a long docstring {i} that should be stripped by code compressor to save tokens. It repeats over and over.'''\n    return {i}" for i in range(100)])
+pytestmark = pytest.mark.bench
 
-@pytest.fixture
-def sample_prose():
-    # Long technical document
-    return "This is a technical documentation section. It contains many words that can be compressed. " * 500
+HERE = pathlib.Path(__file__).parent
+CORPUS = HERE / "corpus"
+BASELINE = HERE / "baseline.json"
+MODEL = "gpt-4o"
 
-def test_json_compression(benchmark, sample_json):
-    config = TautConfig()
-    pipeline = create_pipeline(config)
-    request = LLMRequest(context=sample_json, intent="Summarize")
-    
-    # We can benchmark the pipeline run
-    # For now, let's just make sure it runs and does something.
-    # benchmark(pipeline.run_sync, request)
-    # The actual implementation depends on mock provider being in place
-    pass
+# A measured result may not regress by more than this many percentage points
+# before CI fails.
+REGRESSION_TOLERANCE_PCT = 5.0
 
-def test_code_compression(benchmark, sample_code):
-    pass
 
-def test_prose_compression(benchmark, sample_prose):
-    pass
+def _corpus(subdir: str) -> list[tuple[str, str]]:
+    files = sorted(p for p in (CORPUS / subdir).iterdir() if p.is_file())
+    assert files, f"corpus/{subdir} is empty -- benchmarks would be vacuous"
+    return [(f"{subdir}/{p.name}", p.read_text()) for p in files]
 
-def test_full_pipeline(benchmark, sample_json, sample_code, sample_prose):
-    pass
 
-def test_cache_latency(benchmark):
-    pass
+def _measure(samples, compress) -> dict:
+    """Compress each sample and report aggregate token reduction."""
+    before = after = 0
+    per_file = {}
+    for name, text in samples:
+        compressed = compress(text)
+        b = count_tokens(text, MODEL)
+        a = count_tokens(compressed, MODEL)
+        before += b
+        after += a
+        per_file[name] = {
+            "tokens_before": b,
+            "tokens_after": a,
+            "reduction_pct": round(100 * (1 - a / b), 1) if b else 0.0,
+        }
+    return {
+        "tokens_before": before,
+        "tokens_after": after,
+        "reduction_pct": round(100 * (1 - after / before), 1) if before else 0.0,
+        "files": per_file,
+    }
+
+
+@pytest.fixture(scope="module")
+def results() -> dict:
+    crusher, code, prose = SmartCrusher(), CodeCompressor(), ProseCompressor()
+    return {
+        "json_columnar": _measure(
+            _corpus("json_logs"), lambda t: crusher.compress(t).compressed_text
+        ),
+        "code_ast": _measure(
+            _corpus("python"), lambda t: code.compress(t).compressed_text
+        ),
+        "prose_rules": _measure(
+            _corpus("rag"), lambda t: prose.compress(t).compressed_text
+        ),
+        "chat_prose_rules": _measure(
+            _corpus("chat"), lambda t: prose.compress(t).compressed_text
+        ),
+    }
+
+
+# --------------------------------------------------------------------------
+# Individual strategies
+# --------------------------------------------------------------------------
+
+
+def test_json_compression_is_substantial(results):
+    """Structured payloads are where taut earns its keep."""
+    assert results["json_columnar"]["reduction_pct"] > 40
+
+
+def test_code_compression_is_substantial(results):
+    assert results["code_ast"]["reduction_pct"] > 20
+
+
+def test_prose_compression_is_marginal(results):
+    """Deliberately asserts the *ceiling*, not a floor.
+
+    The prose compressor is eleven filler-phrase regexes. It does not do
+    meaningful work on real retrieved documents, and the README must not imply
+    otherwise. If someone implements real prose compression this test should
+    fail and be replaced with a floor assertion.
+    """
+    assert results["prose_rules"]["reduction_pct"] < 5, (
+        "prose compression improved -- update docs/claims.yaml (compress.rag_60pct) "
+        "and replace this ceiling with a floor"
+    )
+
+
+def test_detector_routes_corpus_to_the_right_strategy():
+    """A compressor that never runs saves nothing, however good it is."""
+    detector = ContentDetector()
+    expected = {"json_logs": "json", "python": "code", "rag": "prose", "chat": "prose"}
+    for subdir, want in expected.items():
+        for name, text in _corpus(subdir):
+            assert detector.detect(text) == want, f"{name} detected as the wrong type"
+
+
+# --------------------------------------------------------------------------
+# Baseline: the numbers the README is allowed to quote
+# --------------------------------------------------------------------------
+
+
+def test_write_or_compare_baseline(results, request):
+    """Persist measurements, and fail on regression against the stored ones."""
+    payload = {
+        "model": MODEL,
+        "note": "Generated by pytest tests/benchmarks -m bench. Do not hand-edit.",
+        "results": {
+            k: {kk: vv for kk, vv in v.items() if kk != "files"} for k, v in results.items()
+        },
+        "detail": {k: v["files"] for k, v in results.items()},
+    }
+
+    if request.config.getoption("--update-baseline") or not BASELINE.exists():
+        BASELINE.write_text(json.dumps(payload, indent=2) + "\n")
+        pytest.skip("baseline written")
+
+    stored = json.loads(BASELINE.read_text())
+    regressions = []
+    for key, measured in payload["results"].items():
+        previous = stored["results"].get(key)
+        if previous is None:
+            continue
+        drop = previous["reduction_pct"] - measured["reduction_pct"]
+        if drop > REGRESSION_TOLERANCE_PCT:
+            regressions.append(
+                f"{key}: {previous['reduction_pct']}% -> {measured['reduction_pct']}%"
+            )
+    assert not regressions, (
+        f"compression regressed beyond {REGRESSION_TOLERANCE_PCT}pp: {regressions}. "
+        "If intentional, rerun with --update-baseline and update README.md."
+    )

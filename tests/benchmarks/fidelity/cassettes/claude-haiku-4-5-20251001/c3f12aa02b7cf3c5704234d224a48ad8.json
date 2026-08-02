@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.biggest_qty_sku[compressed]",
+  "request_key": "c3f12aa02b7cf3c5704234d224a48ad8",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. Which SKU has the highest qty?",
+  "request_message_count": 0,
+  "response": {
+    "content": "SKU-00032",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 1491,
+      "output_tokens": 8
+    }
+  }
+}

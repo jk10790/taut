@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "postmortem.rollback_time[raw]",
+  "request_key": "a910a3943b06342e6f054e9540d2cd87",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. At what time was the previous configuration reapplied?",
+  "request_message_count": 0,
+  "response": {
+    "content": "09:44",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 611,
+      "output_tokens": 3
+    }
+  }
+}

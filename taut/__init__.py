@@ -13,18 +13,32 @@ from taut.core.models import (
     LayerMetrics,
 )
 from taut.core.config import (
-    SemanticCacheConfig as SemanticCache,
-    CompressionConfig as Compression,
-    PrefixAlignmentConfig as PrefixAlignment,
-    TieredRoutingConfig as TieredRouting,
-    TieredRoutingConfig,
-    OutputRestraintConfig as OutputRestraint,
+    CompressionConfig,
+    OutputRestraintConfig,
+    PrefixAlignmentConfig,
+    SemanticCacheConfig,
     TautConfig,
+    TieredRoutingConfig,
 )
-from taut.core.prompt_blocks import SystemBlock
+from taut.core.prompt_blocks import (
+    ContextBlock,
+    PromptBlock,
+    QueryBlock,
+    SystemBlock,
+    ToolsBlock,
+)
 from taut.core.resilience import CapacityExceededError
 from taut.core.middleware import Middleware
 from taut.providers.base import BaseProvider
+
+# Short aliases for the documented `SemanticCache(...)` spelling. Both the
+# canonical *Config names and these aliases are exported, because the docs and
+# examples used the canonical names while only the aliases were importable.
+SemanticCache = SemanticCacheConfig
+Compression = CompressionConfig
+PrefixAlignment = PrefixAlignmentConfig
+TieredRouting = TieredRoutingConfig
+OutputRestraint = OutputRestraintConfig
 
 def __getattr__(name: str):
     if name in ("Pipeline", "create_pipeline"):
@@ -64,8 +78,11 @@ __all__ = [
     "LLMRequest", "LLMResponse", "PipelineContext", "TokenUsage",
     "PipelineMetrics", "Message", "ContentBlock", "LayerMetrics",
     "SemanticCache", "Compression", "PrefixAlignment", "TieredRouting",
-    "TieredRoutingConfig", "SystemBlock", "CapacityExceededError",
-    "OutputRestraint", "TautConfig",
+    "OutputRestraint",
+    "SemanticCacheConfig", "CompressionConfig", "PrefixAlignmentConfig",
+    "TieredRoutingConfig", "OutputRestraintConfig", "TautConfig",
+    "PromptBlock", "SystemBlock", "ToolsBlock", "ContextBlock", "QueryBlock",
+    "CapacityExceededError",
     "Pipeline", "create_pipeline",
     "Middleware", "BaseProvider",
     "CacheBackend", "Embedder",

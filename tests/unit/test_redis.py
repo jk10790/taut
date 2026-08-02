@@ -27,7 +27,6 @@ def redis_backend(mock_redis):
 @pytest.mark.asyncio
 async def test_redis_put_and_get_exact(redis_backend):
     from taut.layers.cache.backends.base import CacheEntry
-    from taut.core.models import LLMResponse, TokenUsage
     
     entry = CacheEntry(
         key="exact_key",
@@ -46,7 +45,6 @@ async def test_redis_put_and_get_exact(redis_backend):
     mock_res = MagicMock()
     mock_doc = MagicMock()
     # We mock the response of the model_dump_json for response
-    import json
     
     redis_backend.client.hget.return_value = entry.model_dump_json().encode()
     # Or if it uses ft().search():
@@ -62,7 +60,6 @@ async def test_redis_put_and_get_exact(redis_backend):
 @pytest.mark.asyncio
 async def test_redis_get_similar(redis_backend):
     from taut.layers.cache.backends.base import CacheEntry
-    from taut.core.models import LLMResponse, TokenUsage
     
     entry = CacheEntry(
         key="semantic_key",

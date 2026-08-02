@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.lookup_status[compressed]",
+  "request_key": "ae562c201769b147a086dfb6b9cc7f98",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. What is the status of SKU-00042?",
+  "request_message_count": 0,
+  "response": {
+    "content": "archived",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 1639,
+      "output_tokens": 2
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.lookup_price[compressed]",
+  "request_key": "3cca906f76a35225ff2623f87afa6d59",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. What is the unit_price of SKU-00042?",
+  "request_message_count": 0,
+  "response": {
+    "content": "358.64",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 1496,
+      "output_tokens": 7
+    }
+  }
+}

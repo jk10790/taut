@@ -23,17 +23,18 @@ class CompressionConfig(BaseModel):
     json_enabled: bool = Field(default=True, alias="json")
     code_enabled: bool = Field(default=True, alias="code")
     prose: Literal["off", "rules"] = "rules"
-    min_tokens_to_compress: int = Field(default=100, ge=0)
-    llmlingua_target_ratio: float = Field(default=0.5, ge=0.1, le=0.9)
     skip_for_simple_tier: bool = True
-    min_compress_tokens: int = 500
+    min_compress_tokens: int = Field(
+        default=500,
+        ge=0,
+        description="Minimum token count before a field is worth compressing.",
+    )
 
 
 class PrefixAlignmentConfig(BaseModel):
     """Configuration for Layer 3: Prefix Cache Alignment."""
     enabled: bool = True
     provider_hints: Literal["auto", "openai", "anthropic", "google"] = "auto"
-    static_blocks: list[str] = Field(default_factory=list)
     detect_cache_breakers: bool = True
 
 
@@ -60,6 +61,26 @@ class OutputRestraintConfig(BaseModel):
     custom_constraints: list[str] = Field(default_factory=list)
 
 
+class ResilienceConfig(BaseModel):
+    """Configuration for backpressure and failure isolation.
+
+    Both primitives existed in taut.core.resilience but were never wired into
+    the pipeline, so the documented CapacityExceededError backpressure contract
+    could not actually trigger. Set `requests_per_second` to enable the token
+    bucket; the circuit breaker is on by default.
+    """
+    requests_per_second: float | None = None
+    burst: float | None = None
+    acquire_timeout: float | None = Field(
+        default=None,
+        description="Seconds to wait for capacity before raising CapacityExceededError. "
+                    "None waits indefinitely.",
+    )
+    circuit_breaker_enabled: bool = True
+    circuit_failure_threshold: int = Field(default=5, ge=1)
+    circuit_reset_timeout: float = Field(default=30.0, gt=0)
+
+
 class TautConfig(BaseModel):
     """Top-level configuration for the taut pipeline."""
     provider: str = "litellm"
@@ -74,6 +95,7 @@ class TautConfig(BaseModel):
     prefix: PrefixAlignmentConfig | None = Field(default_factory=PrefixAlignmentConfig)
     routing: TieredRoutingConfig | None = None
     restraint: OutputRestraintConfig | None = Field(default_factory=OutputRestraintConfig)
+    resilience: ResilienceConfig = Field(default_factory=ResilienceConfig)
     
     @classmethod
     def from_env(cls) -> TautConfig:
@@ -81,13 +103,18 @@ class TautConfig(BaseModel):
         kwargs = {
             "provider": os.getenv("TAUT_PROVIDER", "litellm"),
         }
-        if os.getenv("TAUT_API_KEY"): kwargs["api_key"] = os.getenv("TAUT_API_KEY")
-        if os.getenv("TAUT_BASE_URL"): kwargs["base_url"] = os.getenv("TAUT_BASE_URL")
-        if os.getenv("TAUT_DEFAULT_MODEL"): kwargs["default_model"] = os.getenv("TAUT_DEFAULT_MODEL")
+        if os.getenv("TAUT_API_KEY"):
+            kwargs["api_key"] = os.getenv("TAUT_API_KEY")
+        if os.getenv("TAUT_BASE_URL"):
+            kwargs["base_url"] = os.getenv("TAUT_BASE_URL")
+        if os.getenv("TAUT_DEFAULT_MODEL"):
+            kwargs["default_model"] = os.getenv("TAUT_DEFAULT_MODEL")
         
         cache_config = SemanticCacheConfig()
-        if os.getenv("TAUT_CACHE_BACKEND"): cache_config.backend = os.getenv("TAUT_CACHE_BACKEND")  # type: ignore
-        if os.getenv("TAUT_EMBEDDING_MODEL"): cache_config.embedding_model = os.getenv("TAUT_EMBEDDING_MODEL")  # type: ignore
+        if os.getenv("TAUT_CACHE_BACKEND"):
+            cache_config.backend = os.getenv("TAUT_CACHE_BACKEND")  # type: ignore[assignment]
+        if os.getenv("TAUT_EMBEDDING_MODEL"):
+            cache_config.embedding_model = os.getenv("TAUT_EMBEDDING_MODEL")  # type: ignore[assignment]
         kwargs["cache"] = cache_config
         
         kwargs["compression"] = CompressionConfig()

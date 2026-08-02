@@ -8,7 +8,7 @@ import logging
 class MetricsExporter(abc.ABC):
     """Interface for exporting metrics to external systems."""
     @abc.abstractmethod
-    def export(self, metrics_collector: 'MetricsCollector') -> None:
+    def export(self, metrics_collector: MetricsCollector) -> None:
         pass
 
 class LoggingExporter(MetricsExporter):
@@ -16,7 +16,7 @@ class LoggingExporter(MetricsExporter):
     def __init__(self, level: int = logging.INFO):
         self.level = level
         
-    def export(self, metrics_collector: 'MetricsCollector') -> None:
+    def export(self, metrics_collector: MetricsCollector) -> None:
         logger = logging.getLogger("taut.metrics")
         logger.log(self.level, "Taut Metrics Export:\n%s", metrics_collector.summary())
 
@@ -49,7 +49,8 @@ class MetricsCollector:
     @property
     def cache_hit_rate(self) -> float:
         with self._lock:
-            if not self._requests: return 0.0
+            if not self._requests:
+                return 0.0
             hits = sum(1 for r in self._requests if r.cache_hit)
             return hits / len(self._requests)
     
@@ -73,7 +74,8 @@ class MetricsCollector:
     
     def summary(self) -> str:
         with self._lock:
-            if not self._requests: return "No requests recorded yet."
+            if not self._requests:
+                return "No requests recorded yet."
             total_reqs = len(self._requests)
             hits = sum(1 for r in self._requests if r.cache_hit)
             hit_rate = hits / total_reqs if total_reqs else 0.0
@@ -90,7 +92,7 @@ class MetricsCollector:
             f"│ Total Requests          │ {total_reqs:>12,} │",
             f"│ Cache Hit Rate          │ {hit_rate:>11.1%} │",
             f"│ Total Tokens Saved      │ {tokens_saved:>12,} │",
-            f"│ Estimated Cost Saved    │ ${cost_saved:>11.2f} │",
+            f"│ Estimated Cost Saved    │ ${cost_saved:>11.4f} │",
         ]
         if dist:
             lines.append("│ Model Distribution      │              │")

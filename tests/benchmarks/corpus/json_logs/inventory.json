@@ -1,0 +1,2806 @@
+{
+  "warehouse": "LHR-3",
+  "generated_at": "2026-07-25T09:00:00Z",
+  "items": [
+    {
+      "sku": "SKU-00000",
+      "name": "Widget 0",
+      "qty": 0,
+      "status": "active",
+      "unit_price": 414.8
+    },
+    {
+      "sku": "SKU-00001",
+      "name": "Widget 1",
+      "qty": 3,
+      "status": "pending",
+      "unit_price": 372.19
+    },
+    {
+      "sku": "SKU-00002",
+      "name": "Widget 2",
+      "qty": 6,
+      "status": "inactive",
+      "unit_price": 38.15
+    },
+    {
+      "sku": "SKU-00003",
+      "name": "Widget 3",
+      "qty": 9,
+      "status": "inactive",
+      "unit_price": 319.98
+    },
+    {
+      "sku": "SKU-00004",
+      "name": "Widget 4",
+      "qty": 12,
+      "status": "archived",
+      "unit_price": 296.1
+    },
+    {
+      "sku": "SKU-00005",
+      "name": "Widget 5",
+      "qty": 15,
+      "status": "pending",
+      "unit_price": 352.08
+    },
+    {
+      "sku": "SKU-00006",
+      "name": "Widget 6",
+      "qty": 18,
+      "status": "inactive",
+      "unit_price": 87.98
+    },
+    {
+      "sku": "SKU-00007",
+      "name": "Widget 7",
+      "qty": 21,
+      "status": "inactive",
+      "unit_price": 356.21
+    },
+    {
+      "sku": "SKU-00008",
+      "name": "Widget 8",
+      "qty": 24,
+      "status": "inactive",
+      "unit_price": 245.46
+    },
+    {
+      "sku": "SKU-00009",
+      "name": "Widget 9",
+      "qty": 27,
+      "status": "inactive",
+      "unit_price": 345.91
+    },
+    {
+      "sku": "SKU-00010",
+      "name": "Widget 10",
+      "qty": 30,
+      "status": "archived",
+      "unit_price": 441.57
+    },
+    {
+      "sku": "SKU-00011",
+      "name": "Widget 11",
+      "qty": 33,
+      "status": "inactive",
+      "unit_price": 485.35
+    },
+    {
+      "sku": "SKU-00012",
+      "name": "Widget 12",
+      "qty": 36,
+      "status": "archived",
+      "unit_price": 164.07
+    },
+    {
+      "sku": "SKU-00013",
+      "name": "Widget 13",
+      "qty": 39,
+      "status": "inactive",
+      "unit_price": 182.13
+    },
+    {
+      "sku": "SKU-00014",
+      "name": "Widget 14",
+      "qty": 42,
+      "status": "active",
+      "unit_price": 214.25
+    },
+    {
+      "sku": "SKU-00015",
+      "name": "Widget 15",
+      "qty": 45,
+      "status": "pending",
+      "unit_price": 20.6
+    },
+    {
+      "sku": "SKU-00016",
+      "name": "Widget 16",
+      "qty": 48,
+      "status": "archived",
+      "unit_price": 318.67
+    },
+    {
+      "sku": "SKU-00017",
+      "name": "Widget 17",
+      "qty": 51,
+      "status": "archived",
+      "unit_price": 35.59
+    },
+    {
+      "sku": "SKU-00018",
+      "name": "Widget 18",
+      "qty": 54,
+      "status": "active",
+      "unit_price": 347.04
+    },
+    {
+      "sku": "SKU-00019",
+      "name": "Widget 19",
+      "qty": 57,
+      "status": "archived",
+      "unit_price": 365.62
+    },
+    {
+      "sku": "SKU-00020",
+      "name": "Widget 20",
+      "qty": 60,
+      "status": "archived",
+      "unit_price": 493.78
+    },
+    {
+      "sku": "SKU-00021",
+      "name": "Widget 21",
+      "qty": 63,
+      "status": "pending",
+      "unit_price": 253.49
+    },
+    {
+      "sku": "SKU-00022",
+      "name": "Widget 22",
+      "qty": 66,
+      "status": "archived",
+      "unit_price": 23.83
+    },
+    {
+      "sku": "SKU-00023",
+      "name": "Widget 23",
+      "qty": 69,
+      "status": "archived",
+      "unit_price": 31.2
+    },
+    {
+      "sku": "SKU-00024",
+      "name": "Widget 24",
+      "qty": 72,
+      "status": "pending",
+      "unit_price": 310.42
+    },
+    {
+      "sku": "SKU-00025",
+      "name": "Widget 25",
+      "qty": 75,
+      "status": "inactive",
+      "unit_price": 131.44
+    },
+    {
+      "sku": "SKU-00026",
+      "name": "Widget 26",
+      "qty": 78,
+      "status": "inactive",
+      "unit_price": 432.35
+    },
+    {
+      "sku": "SKU-00027",
+      "name": "Widget 27",
+      "qty": 81,
+      "status": "archived",
+      "unit_price": 422.43
+    },
+    {
+      "sku": "SKU-00028",
+      "name": "Widget 28",
+      "qty": 84,
+      "status": "inactive",
+      "unit_price": 498.5
+    },
+    {
+      "sku": "SKU-00029",
+      "name": "Widget 29",
+      "qty": 87,
+      "status": "pending",
+      "unit_price": 221.41
+    },
+    {
+      "sku": "SKU-00030",
+      "name": "Widget 30",
+      "qty": 90,
+      "status": "pending",
+      "unit_price": 444.67
+    },
+    {
+      "sku": "SKU-00031",
+      "name": "Widget 31",
+      "qty": 93,
+      "status": "active",
+      "unit_price": 12.42
+    },
+    {
+      "sku": "SKU-00032",
+      "name": "Widget 32",
+      "qty": 96,
+      "status": "pending",
+      "unit_price": 465.85
+    },
+    {
+      "sku": "SKU-00033",
+      "name": "Widget 33",
+      "qty": 2,
+      "status": "archived",
+      "unit_price": 46.26
+    },
+    {
+      "sku": "SKU-00034",
+      "name": "Widget 34",
+      "qty": 5,
+      "status": "inactive",
+      "unit_price": 462.48
+    },
+    {
+      "sku": "SKU-00035",
+      "name": "Widget 35",
+      "qty": 8,
+      "status": "inactive",
+      "unit_price": 310.75
+    },
+    {
+      "sku": "SKU-00036",
+      "name": "Widget 36",
+      "qty": 11,
+      "status": "archived",
+      "unit_price": 213.97
+    },
+    {
+      "sku": "SKU-00037",
+      "name": "Widget 37",
+      "qty": 14,
+      "status": "pending",
+      "unit_price": 202.92
+    },
+    {
+      "sku": "SKU-00038",
+      "name": "Widget 38",
+      "qty": 17,
+      "status": "archived",
+      "unit_price": 376.19
+    },
+    {
+      "sku": "SKU-00039",
+      "name": "Widget 39",
+      "qty": 20,
+      "status": "active",
+      "unit_price": 98.2
+    },
+    {
+      "sku": "SKU-00040",
+      "name": "Widget 40",
+      "qty": 23,
+      "status": "inactive",
+      "unit_price": 86.62
+    },
+    {
+      "sku": "SKU-00041",
+      "name": "Widget 41",
+      "qty": 26,
+      "status": "inactive",
+      "unit_price": 434.53
+    },
+    {
+      "sku": "SKU-00042",
+      "name": "Widget 42",
+      "qty": 29,
+      "status": "archived",
+      "unit_price": 358.64
+    },
+    {
+      "sku": "SKU-00043",
+      "name": "Widget 43",
+      "qty": 32,
+      "status": "inactive",
+      "unit_price": 130.97
+    },
+    {
+      "sku": "SKU-00044",
+      "name": "Widget 44",
+      "qty": 35,
+      "status": "archived",
+      "unit_price": 107.94
+    },
+    {
+      "sku": "SKU-00045",
+      "name": "Widget 45",
+      "qty": 38,
+      "status": "archived",
+      "unit_price": 455.05
+    },
+    {
+      "sku": "SKU-00046",
+      "name": "Widget 46",
+      "qty": 41,
+      "status": "inactive",
+      "unit_price": 294.92
+    },
+    {
+      "sku": "SKU-00047",
+      "name": "Widget 47",
+      "qty": 44,
+      "status": "pending",
+      "unit_price": 131.75
+    },
+    {
+      "sku": "SKU-00048",
+      "name": "Widget 48",
+      "qty": 47,
+      "status": "archived",
+      "unit_price": 333.64
+    },
+    {
+      "sku": "SKU-00049",
+      "name": "Widget 49",
+      "qty": 50,
+      "status": "inactive",
+      "unit_price": 24.23
+    },
+    {
+      "sku": "SKU-00050",
+      "name": "Widget 50",
+      "qty": 53,
+      "status": "archived",
+      "unit_price": 228.25
+    },
+    {
+      "sku": "SKU-00051",
+      "name": "Widget 51",
+      "qty": 56,
+      "status": "active",
+      "unit_price": 28.26
+    },
+    {
+      "sku": "SKU-00052",
+      "name": "Widget 52",
+      "qty": 59,
+      "status": "inactive",
+      "unit_price": 223.73
+    },
+    {
+      "sku": "SKU-00053",
+      "name": "Widget 53",
+      "qty": 62,
+      "status": "active",
+      "unit_price": 465.28
+    },
+    {
+      "sku": "SKU-00054",
+      "name": "Widget 54",
+      "qty": 65,
+      "status": "inactive",
+      "unit_price": 297.71
+    },
+    {
+      "sku": "SKU-00055",
+      "name": "Widget 55",
+      "qty": 68,
+      "status": "pending",
+      "unit_price": 110.65
+    },
+    {
+      "sku": "SKU-00056",
+      "name": "Widget 56",
+      "qty": 71,
+      "status": "active",
+      "unit_price": 219.14
+    },
+    {
+      "sku": "SKU-00057",
+      "name": "Widget 57",
+      "qty": 74,
+      "status": "archived",
+      "unit_price": 461.32
+    },
+    {
+      "sku": "SKU-00058",
+      "name": "Widget 58",
+      "qty": 77,
+      "status": "pending",
+      "unit_price": 472.39
+    },
+    {
+      "sku": "SKU-00059",
+      "name": "Widget 59",
+      "qty": 80,
+      "status": "pending",
+      "unit_price": 304.89
+    },
+    {
+      "sku": "SKU-00060",
+      "name": "Widget 60",
+      "qty": 83,
+      "status": "active",
+      "unit_price": 406.2
+    },
+    {
+      "sku": "SKU-00061",
+      "name": "Widget 61",
+      "qty": 86,
+      "status": "archived",
+      "unit_price": 94.64
+    },
+    {
+      "sku": "SKU-00062",
+      "name": "Widget 62",
+      "qty": 89,
+      "status": "inactive",
+      "unit_price": 242.69
+    },
+    {
+      "sku": "SKU-00063",
+      "name": "Widget 63",
+      "qty": 92,
+      "status": "inactive",
+      "unit_price": 123.74
+    },
+    {
+      "sku": "SKU-00064",
+      "name": "Widget 64",
+      "qty": 95,
+      "status": "active",
+      "unit_price": 394.51
+    },
+    {
+      "sku": "SKU-00065",
+      "name": "Widget 65",
+      "qty": 1,
+      "status": "inactive",
+      "unit_price": 377.45
+    },
+    {
+      "sku": "SKU-00066",
+      "name": "Widget 66",
+      "qty": 4,
+      "status": "pending",
+      "unit_price": 91.85
+    },
+    {
+      "sku": "SKU-00067",
+      "name": "Widget 67",
+      "qty": 7,
+      "status": "pending",
+      "unit_price": 444.03
+    },
+    {
+      "sku": "SKU-00068",
+      "name": "Widget 68",
+      "qty": 10,
+      "status": "archived",
+      "unit_price": 254.01
+    },
+    {
+      "sku": "SKU-00069",
+      "name": "Widget 69",
+      "qty": 13,
+      "status": "active",
+      "unit_price": 496.52
+    },
+    {
+      "sku": "SKU-00070",
+      "name": "Widget 70",
+      "qty": 16,
+      "status": "active",
+      "unit_price": 408.01
+    },
+    {
+      "sku": "SKU-00071",
+      "name": "Widget 71",
+      "qty": 19,
+      "status": "pending",
+      "unit_price": 391.9
+    },
+    {
+      "sku": "SKU-00072",
+      "name": "Widget 72",
+      "qty": 22,
+      "status": "active",
+      "unit_price": 120.13
+    },
+    {
+      "sku": "SKU-00073",
+      "name": "Widget 73",
+      "qty": 25,
+      "status": "archived",
+      "unit_price": 213.29
+    },
+    {
+      "sku": "SKU-00074",
+      "name": "Widget 74",
+      "qty": 28,
+      "status": "archived",
+      "unit_price": 66.89
+    },
+    {
+      "sku": "SKU-00075",
+      "name": "Widget 75",
+      "qty": 31,
+      "status": "pending",
+      "unit_price": 401.12
+    },
+    {
+      "sku": "SKU-00076",
+      "name": "Widget 76",
+      "qty": 34,
+      "status": "inactive",
+      "unit_price": 499.6
+    },
+    {
+      "sku": "SKU-00077",
+      "name": "Widget 77",
+      "qty": 37,
+      "status": "pending",
+      "unit_price": 382.15
+    },
+    {
+      "sku": "SKU-00078",
+      "name": "Widget 78",
+      "qty": 40,
+      "status": "active",
+      "unit_price": 74.04
+    },
+    {
+      "sku": "SKU-00079",
+      "name": "Widget 79",
+      "qty": 43,
+      "status": "archived",
+      "unit_price": 219.18
+    },
+    {
+      "sku": "SKU-00080",
+      "name": "Widget 80",
+      "qty": 46,
+      "status": "pending",
+      "unit_price": 218.66
+    },
+    {
+      "sku": "SKU-00081",
+      "name": "Widget 81",
+      "qty": 49,
+      "status": "pending",
+      "unit_price": 222.09
+    },
+    {
+      "sku": "SKU-00082",
+      "name": "Widget 82",
+      "qty": 52,
+      "status": "active",
+      "unit_price": 193.89
+    },
+    {
+      "sku": "SKU-00083",
+      "name": "Widget 83",
+      "qty": 55,
+      "status": "active",
+      "unit_price": 437.2
+    },
+    {
+      "sku": "SKU-00084",
+      "name": "Widget 84",
+      "qty": 58,
+      "status": "archived",
+      "unit_price": 486.6
+    },
+    {
+      "sku": "SKU-00085",
+      "name": "Widget 85",
+      "qty": 61,
+      "status": "active",
+      "unit_price": 429.55
+    },
+    {
+      "sku": "SKU-00086",
+      "name": "Widget 86",
+      "qty": 64,
+      "status": "inactive",
+      "unit_price": 39.34
+    },
+    {
+      "sku": "SKU-00087",
+      "name": "Widget 87",
+      "qty": 67,
+      "status": "archived",
+      "unit_price": 105.59
+    },
+    {
+      "sku": "SKU-00088",
+      "name": "Widget 88",
+      "qty": 70,
+      "status": "pending",
+      "unit_price": 312.33
+    },
+    {
+      "sku": "SKU-00089",
+      "name": "Widget 89",
+      "qty": 73,
+      "status": "active",
+      "unit_price": 492.28
+    },
+    {
+      "sku": "SKU-00090",
+      "name": "Widget 90",
+      "qty": 76,
+      "status": "inactive",
+      "unit_price": 414.04
+    },
+    {
+      "sku": "SKU-00091",
+      "name": "Widget 91",
+      "qty": 79,
+      "status": "inactive",
+      "unit_price": 493.86
+    },
+    {
+      "sku": "SKU-00092",
+      "name": "Widget 92",
+      "qty": 82,
+      "status": "pending",
+      "unit_price": 338.6
+    },
+    {
+      "sku": "SKU-00093",
+      "name": "Widget 93",
+      "qty": 85,
+      "status": "pending",
+      "unit_price": 136.55
+    },
+    {
+      "sku": "SKU-00094",
+      "name": "Widget 94",
+      "qty": 88,
+      "status": "archived",
+      "unit_price": 453.78
+    },
+    {
+      "sku": "SKU-00095",
+      "name": "Widget 95",
+      "qty": 91,
+      "status": "archived",
+      "unit_price": 402.9
+    },
+    {
+      "sku": "SKU-00096",
+      "name": "Widget 96",
+      "qty": 94,
+      "status": "inactive",
+      "unit_price": 75.16
+    },
+    {
+      "sku": "SKU-00097",
+      "name": "Widget 97",
+      "qty": 0,
+      "status": "archived",
+      "unit_price": 175.09
+    },
+    {
+      "sku": "SKU-00098",
+      "name": "Widget 98",
+      "qty": 3,
+      "status": "archived",
+      "unit_price": 336.12
+    },
+    {
+      "sku": "SKU-00099",
+      "name": "Widget 99",
+      "qty": 6,
+      "status": "archived",
+      "unit_price": 45.27
+    },
+    {
+      "sku": "SKU-00100",
+      "name": "Widget 100",
+      "qty": 9,
+      "status": "inactive",
+      "unit_price": 27.73
+    },
+    {
+      "sku": "SKU-00101",
+      "name": "Widget 101",
+      "qty": 12,
+      "status": "active",
+      "unit_price": 194.83
+    },
+    {
+      "sku": "SKU-00102",
+      "name": "Widget 102",
+      "qty": 15,
+      "status": "archived",
+      "unit_price": 273.75
+    },
+    {
+      "sku": "SKU-00103",
+      "name": "Widget 103",
+      "qty": 18,
+      "status": "active",
+      "unit_price": 381.96
+    },
+    {
+      "sku": "SKU-00104",
+      "name": "Widget 104",
+      "qty": 21,
+      "status": "pending",
+      "unit_price": 330.19
+    },
+    {
+      "sku": "SKU-00105",
+      "name": "Widget 105",
+      "qty": 24,
+      "status": "inactive",
+      "unit_price": 389.64
+    },
+    {
+      "sku": "SKU-00106",
+      "name": "Widget 106",
+      "qty": 27,
+      "status": "inactive",
+      "unit_price": 109.83
+    },
+    {
+      "sku": "SKU-00107",
+      "name": "Widget 107",
+      "qty": 30,
+      "status": "inactive",
+      "unit_price": 42.5
+    },
+    {
+      "sku": "SKU-00108",
+      "name": "Widget 108",
+      "qty": 33,
+      "status": "active",
+      "unit_price": 139.73
+    },
+    {
+      "sku": "SKU-00109",
+      "name": "Widget 109",
+      "qty": 36,
+      "status": "active",
+      "unit_price": 314.52
+    },
+    {
+      "sku": "SKU-00110",
+      "name": "Widget 110",
+      "qty": 39,
+      "status": "active",
+      "unit_price": 61.18
+    },
+    {
+      "sku": "SKU-00111",
+      "name": "Widget 111",
+      "qty": 42,
+      "status": "inactive",
+      "unit_price": 468.46
+    },
+    {
+      "sku": "SKU-00112",
+      "name": "Widget 112",
+      "qty": 45,
+      "status": "active",
+      "unit_price": 85.5
+    },
+    {
+      "sku": "SKU-00113",
+      "name": "Widget 113",
+      "qty": 48,
+      "status": "inactive",
+      "unit_price": 32.01
+    },
+    {
+      "sku": "SKU-00114",
+      "name": "Widget 114",
+      "qty": 51,
+      "status": "archived",
+      "unit_price": 144.67
+    },
+    {
+      "sku": "SKU-00115",
+      "name": "Widget 115",
+      "qty": 54,
+      "status": "active",
+      "unit_price": 255.92
+    },
+    {
+      "sku": "SKU-00116",
+      "name": "Widget 116",
+      "qty": 57,
+      "status": "active",
+      "unit_price": 379.91
+    },
+    {
+      "sku": "SKU-00117",
+      "name": "Widget 117",
+      "qty": 60,
+      "status": "active",
+      "unit_price": 134.85
+    },
+    {
+      "sku": "SKU-00118",
+      "name": "Widget 118",
+      "qty": 63,
+      "status": "archived",
+      "unit_price": 465.8
+    },
+    {
+      "sku": "SKU-00119",
+      "name": "Widget 119",
+      "qty": 66,
+      "status": "archived",
+      "unit_price": 153.89
+    },
+    {
+      "sku": "SKU-00120",
+      "name": "Widget 120",
+      "qty": 69,
+      "status": "archived",
+      "unit_price": 35.28
+    },
+    {
+      "sku": "SKU-00121",
+      "name": "Widget 121",
+      "qty": 72,
+      "status": "archived",
+      "unit_price": 202.53
+    },
+    {
+      "sku": "SKU-00122",
+      "name": "Widget 122",
+      "qty": 75,
+      "status": "archived",
+      "unit_price": 21.3
+    },
+    {
+      "sku": "SKU-00123",
+      "name": "Widget 123",
+      "qty": 78,
+      "status": "inactive",
+      "unit_price": 435.93
+    },
+    {
+      "sku": "SKU-00124",
+      "name": "Widget 124",
+      "qty": 81,
+      "status": "pending",
+      "unit_price": 273.46
+    },
+    {
+      "sku": "SKU-00125",
+      "name": "Widget 125",
+      "qty": 84,
+      "status": "pending",
+      "unit_price": 440.03
+    },
+    {
+      "sku": "SKU-00126",
+      "name": "Widget 126",
+      "qty": 87,
+      "status": "active",
+      "unit_price": 72.76
+    },
+    {
+      "sku": "SKU-00127",
+      "name": "Widget 127",
+      "qty": 90,
+      "status": "pending",
+      "unit_price": 361.82
+    },
+    {
+      "sku": "SKU-00128",
+      "name": "Widget 128",
+      "qty": 93,
+      "status": "pending",
+      "unit_price": 136.36
+    },
+    {
+      "sku": "SKU-00129",
+      "name": "Widget 129",
+      "qty": 96,
+      "status": "pending",
+      "unit_price": 154.2
+    },
+    {
+      "sku": "SKU-00130",
+      "name": "Widget 130",
+      "qty": 2,
+      "status": "active",
+      "unit_price": 326.55
+    },
+    {
+      "sku": "SKU-00131",
+      "name": "Widget 131",
+      "qty": 5,
+      "status": "pending",
+      "unit_price": 171.46
+    },
+    {
+      "sku": "SKU-00132",
+      "name": "Widget 132",
+      "qty": 8,
+      "status": "active",
+      "unit_price": 400.03
+    },
+    {
+      "sku": "SKU-00133",
+      "name": "Widget 133",
+      "qty": 11,
+      "status": "pending",
+      "unit_price": 115.4
+    },
+    {
+      "sku": "SKU-00134",
+      "name": "Widget 134",
+      "qty": 14,
+      "status": "archived",
+      "unit_price": 165.79
+    },
+    {
+      "sku": "SKU-00135",
+      "name": "Widget 135",
+      "qty": 17,
+      "status": "inactive",
+      "unit_price": 131.15
+    },
+    {
+      "sku": "SKU-00136",
+      "name": "Widget 136",
+      "qty": 20,
+      "status": "active",
+      "unit_price": 470.08
+    },
+    {
+      "sku": "SKU-00137",
+      "name": "Widget 137",
+      "qty": 23,
+      "status": "inactive",
+      "unit_price": 258.62
+    },
+    {
+      "sku": "SKU-00138",
+      "name": "Widget 138",
+      "qty": 26,
+      "status": "archived",
+      "unit_price": 408.81
+    },
+    {
+      "sku": "SKU-00139",
+      "name": "Widget 139",
+      "qty": 29,
+      "status": "archived",
+      "unit_price": 319.48
+    },
+    {
+      "sku": "SKU-00140",
+      "name": "Widget 140",
+      "qty": 32,
+      "status": "active",
+      "unit_price": 384.82
+    },
+    {
+      "sku": "SKU-00141",
+      "name": "Widget 141",
+      "qty": 35,
+      "status": "pending",
+      "unit_price": 78.84
+    },
+    {
+      "sku": "SKU-00142",
+      "name": "Widget 142",
+      "qty": 38,
+      "status": "inactive",
+      "unit_price": 17.44
+    },
+    {
+      "sku": "SKU-00143",
+      "name": "Widget 143",
+      "qty": 41,
+      "status": "active",
+      "unit_price": 103.93
+    },
+    {
+      "sku": "SKU-00144",
+      "name": "Widget 144",
+      "qty": 44,
+      "status": "active",
+      "unit_price": 142.75
+    },
+    {
+      "sku": "SKU-00145",
+      "name": "Widget 145",
+      "qty": 47,
+      "status": "pending",
+      "unit_price": 7.25
+    },
+    {
+      "sku": "SKU-00146",
+      "name": "Widget 146",
+      "qty": 50,
+      "status": "pending",
+      "unit_price": 388.96
+    },
+    {
+      "sku": "SKU-00147",
+      "name": "Widget 147",
+      "qty": 53,
+      "status": "pending",
+      "unit_price": 72.11
+    },
+    {
+      "sku": "SKU-00148",
+      "name": "Widget 148",
+      "qty": 56,
+      "status": "archived",
+      "unit_price": 139.44
+    },
+    {
+      "sku": "SKU-00149",
+      "name": "Widget 149",
+      "qty": 59,
+      "status": "active",
+      "unit_price": 338.3
+    },
+    {
+      "sku": "SKU-00150",
+      "name": "Widget 150",
+      "qty": 62,
+      "status": "archived",
+      "unit_price": 17.64
+    },
+    {
+      "sku": "SKU-00151",
+      "name": "Widget 151",
+      "qty": 65,
+      "status": "inactive",
+      "unit_price": 236.96
+    },
+    {
+      "sku": "SKU-00152",
+      "name": "Widget 152",
+      "qty": 68,
+      "status": "active",
+      "unit_price": 400.37
+    },
+    {
+      "sku": "SKU-00153",
+      "name": "Widget 153",
+      "qty": 71,
+      "status": "pending",
+      "unit_price": 349.97
+    },
+    {
+      "sku": "SKU-00154",
+      "name": "Widget 154",
+      "qty": 74,
+      "status": "archived",
+      "unit_price": 132.81
+    },
+    {
+      "sku": "SKU-00155",
+      "name": "Widget 155",
+      "qty": 77,
+      "status": "pending",
+      "unit_price": 21.99
+    },
+    {
+      "sku": "SKU-00156",
+      "name": "Widget 156",
+      "qty": 80,
+      "status": "inactive",
+      "unit_price": 227.97
+    },
+    {
+      "sku": "SKU-00157",
+      "name": "Widget 157",
+      "qty": 83,
+      "status": "inactive",
+      "unit_price": 451.52
+    },
+    {
+      "sku": "SKU-00158",
+      "name": "Widget 158",
+      "qty": 86,
+      "status": "pending",
+      "unit_price": 28.57
+    },
+    {
+      "sku": "SKU-00159",
+      "name": "Widget 159",
+      "qty": 89,
+      "status": "inactive",
+      "unit_price": 250.12
+    },
+    {
+      "sku": "SKU-00160",
+      "name": "Widget 160",
+      "qty": 92,
+      "status": "archived",
+      "unit_price": 415.48
+    },
+    {
+      "sku": "SKU-00161",
+      "name": "Widget 161",
+      "qty": 95,
+      "status": "active",
+      "unit_price": 319.44
+    },
+    {
+      "sku": "SKU-00162",
+      "name": "Widget 162",
+      "qty": 1,
+      "status": "archived",
+      "unit_price": 270.69
+    },
+    {
+      "sku": "SKU-00163",
+      "name": "Widget 163",
+      "qty": 4,
+      "status": "pending",
+      "unit_price": 237.43
+    },
+    {
+      "sku": "SKU-00164",
+      "name": "Widget 164",
+      "qty": 7,
+      "status": "active",
+      "unit_price": 378.74
+    },
+    {
+      "sku": "SKU-00165",
+      "name": "Widget 165",
+      "qty": 10,
+      "status": "archived",
+      "unit_price": 136.29
+    },
+    {
+      "sku": "SKU-00166",
+      "name": "Widget 166",
+      "qty": 13,
+      "status": "inactive",
+      "unit_price": 305.96
+    },
+    {
+      "sku": "SKU-00167",
+      "name": "Widget 167",
+      "qty": 16,
+      "status": "pending",
+      "unit_price": 329.61
+    },
+    {
+      "sku": "SKU-00168",
+      "name": "Widget 168",
+      "qty": 19,
+      "status": "inactive",
+      "unit_price": 409.95
+    },
+    {
+      "sku": "SKU-00169",
+      "name": "Widget 169",
+      "qty": 22,
+      "status": "inactive",
+      "unit_price": 377.98
+    },
+    {
+      "sku": "SKU-00170",
+      "name": "Widget 170",
+      "qty": 25,
+      "status": "active",
+      "unit_price": 330.64
+    },
+    {
+      "sku": "SKU-00171",
+      "name": "Widget 171",
+      "qty": 28,
+      "status": "pending",
+      "unit_price": 373.82
+    },
+    {
+      "sku": "SKU-00172",
+      "name": "Widget 172",
+      "qty": 31,
+      "status": "inactive",
+      "unit_price": 419.75
+    },
+    {
+      "sku": "SKU-00173",
+      "name": "Widget 173",
+      "qty": 34,
+      "status": "archived",
+      "unit_price": 27.1
+    },
+    {
+      "sku": "SKU-00174",
+      "name": "Widget 174",
+      "qty": 37,
+      "status": "inactive",
+      "unit_price": 488.92
+    },
+    {
+      "sku": "SKU-00175",
+      "name": "Widget 175",
+      "qty": 40,
+      "status": "archived",
+      "unit_price": 349.54
+    },
+    {
+      "sku": "SKU-00176",
+      "name": "Widget 176",
+      "qty": 43,
+      "status": "inactive",
+      "unit_price": 305.9
+    },
+    {
+      "sku": "SKU-00177",
+      "name": "Widget 177",
+      "qty": 46,
+      "status": "archived",
+      "unit_price": 463.31
+    },
+    {
+      "sku": "SKU-00178",
+      "name": "Widget 178",
+      "qty": 49,
+      "status": "inactive",
+      "unit_price": 490.4
+    },
+    {
+      "sku": "SKU-00179",
+      "name": "Widget 179",
+      "qty": 52,
+      "status": "inactive",
+      "unit_price": 330.36
+    },
+    {
+      "sku": "SKU-00180",
+      "name": "Widget 180",
+      "qty": 55,
+      "status": "pending",
+      "unit_price": 171.59
+    },
+    {
+      "sku": "SKU-00181",
+      "name": "Widget 181",
+      "qty": 58,
+      "status": "archived",
+      "unit_price": 278.89
+    },
+    {
+      "sku": "SKU-00182",
+      "name": "Widget 182",
+      "qty": 61,
+      "status": "active",
+      "unit_price": 222.62
+    },
+    {
+      "sku": "SKU-00183",
+      "name": "Widget 183",
+      "qty": 64,
+      "status": "pending",
+      "unit_price": 499.87
+    },
+    {
+      "sku": "SKU-00184",
+      "name": "Widget 184",
+      "qty": 67,
+      "status": "active",
+      "unit_price": 337.34
+    },
+    {
+      "sku": "SKU-00185",
+      "name": "Widget 185",
+      "qty": 70,
+      "status": "archived",
+      "unit_price": 135.25
+    },
+    {
+      "sku": "SKU-00186",
+      "name": "Widget 186",
+      "qty": 73,
+      "status": "inactive",
+      "unit_price": 323.98
+    },
+    {
+      "sku": "SKU-00187",
+      "name": "Widget 187",
+      "qty": 76,
+      "status": "archived",
+      "unit_price": 173.1
+    },
+    {
+      "sku": "SKU-00188",
+      "name": "Widget 188",
+      "qty": 79,
+      "status": "active",
+      "unit_price": 228.28
+    },
+    {
+      "sku": "SKU-00189",
+      "name": "Widget 189",
+      "qty": 82,
+      "status": "active",
+      "unit_price": 369.95
+    },
+    {
+      "sku": "SKU-00190",
+      "name": "Widget 190",
+      "qty": 85,
+      "status": "inactive",
+      "unit_price": 3.04
+    },
+    {
+      "sku": "SKU-00191",
+      "name": "Widget 191",
+      "qty": 88,
+      "status": "archived",
+      "unit_price": 107.13
+    },
+    {
+      "sku": "SKU-00192",
+      "name": "Widget 192",
+      "qty": 91,
+      "status": "pending",
+      "unit_price": 226.34
+    },
+    {
+      "sku": "SKU-00193",
+      "name": "Widget 193",
+      "qty": 94,
+      "status": "active",
+      "unit_price": 81.87
+    },
+    {
+      "sku": "SKU-00194",
+      "name": "Widget 194",
+      "qty": 0,
+      "status": "archived",
+      "unit_price": 354.75
+    },
+    {
+      "sku": "SKU-00195",
+      "name": "Widget 195",
+      "qty": 3,
+      "status": "pending",
+      "unit_price": 152.94
+    },
+    {
+      "sku": "SKU-00196",
+      "name": "Widget 196",
+      "qty": 6,
+      "status": "active",
+      "unit_price": 64.13
+    },
+    {
+      "sku": "SKU-00197",
+      "name": "Widget 197",
+      "qty": 9,
+      "status": "pending",
+      "unit_price": 298.8
+    },
+    {
+      "sku": "SKU-00198",
+      "name": "Widget 198",
+      "qty": 12,
+      "status": "inactive",
+      "unit_price": 440.86
+    },
+    {
+      "sku": "SKU-00199",
+      "name": "Widget 199",
+      "qty": 15,
+      "status": "pending",
+      "unit_price": 248.19
+    },
+    {
+      "sku": "SKU-00200",
+      "name": "Widget 200",
+      "qty": 18,
+      "status": "active",
+      "unit_price": 385.67
+    },
+    {
+      "sku": "SKU-00201",
+      "name": "Widget 201",
+      "qty": 21,
+      "status": "pending",
+      "unit_price": 7.47
+    },
+    {
+      "sku": "SKU-00202",
+      "name": "Widget 202",
+      "qty": 24,
+      "status": "active",
+      "unit_price": 46.14
+    },
+    {
+      "sku": "SKU-00203",
+      "name": "Widget 203",
+      "qty": 27,
+      "status": "inactive",
+      "unit_price": 133.09
+    },
+    {
+      "sku": "SKU-00204",
+      "name": "Widget 204",
+      "qty": 30,
+      "status": "active",
+      "unit_price": 95.07
+    },
+    {
+      "sku": "SKU-00205",
+      "name": "Widget 205",
+      "qty": 33,
+      "status": "inactive",
+      "unit_price": 490.53
+    },
+    {
+      "sku": "SKU-00206",
+      "name": "Widget 206",
+      "qty": 36,
+      "status": "active",
+      "unit_price": 200.26
+    },
+    {
+      "sku": "SKU-00207",
+      "name": "Widget 207",
+      "qty": 39,
+      "status": "active",
+      "unit_price": 342.54
+    },
+    {
+      "sku": "SKU-00208",
+      "name": "Widget 208",
+      "qty": 42,
+      "status": "inactive",
+      "unit_price": 105.97
+    },
+    {
+      "sku": "SKU-00209",
+      "name": "Widget 209",
+      "qty": 45,
+      "status": "active",
+      "unit_price": 392.82
+    },
+    {
+      "sku": "SKU-00210",
+      "name": "Widget 210",
+      "qty": 48,
+      "status": "pending",
+      "unit_price": 25.89
+    },
+    {
+      "sku": "SKU-00211",
+      "name": "Widget 211",
+      "qty": 51,
+      "status": "inactive",
+      "unit_price": 165.69
+    },
+    {
+      "sku": "SKU-00212",
+      "name": "Widget 212",
+      "qty": 54,
+      "status": "inactive",
+      "unit_price": 387.63
+    },
+    {
+      "sku": "SKU-00213",
+      "name": "Widget 213",
+      "qty": 57,
+      "status": "active",
+      "unit_price": 148.19
+    },
+    {
+      "sku": "SKU-00214",
+      "name": "Widget 214",
+      "qty": 60,
+      "status": "inactive",
+      "unit_price": 156.09
+    },
+    {
+      "sku": "SKU-00215",
+      "name": "Widget 215",
+      "qty": 63,
+      "status": "active",
+      "unit_price": 78.85
+    },
+    {
+      "sku": "SKU-00216",
+      "name": "Widget 216",
+      "qty": 66,
+      "status": "active",
+      "unit_price": 260.11
+    },
+    {
+      "sku": "SKU-00217",
+      "name": "Widget 217",
+      "qty": 69,
+      "status": "archived",
+      "unit_price": 454.09
+    },
+    {
+      "sku": "SKU-00218",
+      "name": "Widget 218",
+      "qty": 72,
+      "status": "inactive",
+      "unit_price": 234.42
+    },
+    {
+      "sku": "SKU-00219",
+      "name": "Widget 219",
+      "qty": 75,
+      "status": "active",
+      "unit_price": 494.32
+    },
+    {
+      "sku": "SKU-00220",
+      "name": "Widget 220",
+      "qty": 78,
+      "status": "active",
+      "unit_price": 53.87
+    },
+    {
+      "sku": "SKU-00221",
+      "name": "Widget 221",
+      "qty": 81,
+      "status": "inactive",
+      "unit_price": 319.21
+    },
+    {
+      "sku": "SKU-00222",
+      "name": "Widget 222",
+      "qty": 84,
+      "status": "archived",
+      "unit_price": 426.46
+    },
+    {
+      "sku": "SKU-00223",
+      "name": "Widget 223",
+      "qty": 87,
+      "status": "inactive",
+      "unit_price": 19.78
+    },
+    {
+      "sku": "SKU-00224",
+      "name": "Widget 224",
+      "qty": 90,
+      "status": "inactive",
+      "unit_price": 271.81
+    },
+    {
+      "sku": "SKU-00225",
+      "name": "Widget 225",
+      "qty": 93,
+      "status": "archived",
+      "unit_price": 140.28
+    },
+    {
+      "sku": "SKU-00226",
+      "name": "Widget 226",
+      "qty": 96,
+      "status": "archived",
+      "unit_price": 249.12
+    },
+    {
+      "sku": "SKU-00227",
+      "name": "Widget 227",
+      "qty": 2,
+      "status": "archived",
+      "unit_price": 16.66
+    },
+    {
+      "sku": "SKU-00228",
+      "name": "Widget 228",
+      "qty": 5,
+      "status": "pending",
+      "unit_price": 196.32
+    },
+    {
+      "sku": "SKU-00229",
+      "name": "Widget 229",
+      "qty": 8,
+      "status": "active",
+      "unit_price": 27.37
+    },
+    {
+      "sku": "SKU-00230",
+      "name": "Widget 230",
+      "qty": 11,
+      "status": "pending",
+      "unit_price": 28.35
+    },
+    {
+      "sku": "SKU-00231",
+      "name": "Widget 231",
+      "qty": 14,
+      "status": "inactive",
+      "unit_price": 207.71
+    },
+    {
+      "sku": "SKU-00232",
+      "name": "Widget 232",
+      "qty": 17,
+      "status": "archived",
+      "unit_price": 82.55
+    },
+    {
+      "sku": "SKU-00233",
+      "name": "Widget 233",
+      "qty": 20,
+      "status": "active",
+      "unit_price": 78.08
+    },
+    {
+      "sku": "SKU-00234",
+      "name": "Widget 234",
+      "qty": 23,
+      "status": "archived",
+      "unit_price": 172.24
+    },
+    {
+      "sku": "SKU-00235",
+      "name": "Widget 235",
+      "qty": 26,
+      "status": "pending",
+      "unit_price": 111.67
+    },
+    {
+      "sku": "SKU-00236",
+      "name": "Widget 236",
+      "qty": 29,
+      "status": "active",
+      "unit_price": 145.08
+    },
+    {
+      "sku": "SKU-00237",
+      "name": "Widget 237",
+      "qty": 32,
+      "status": "archived",
+      "unit_price": 302.36
+    },
+    {
+      "sku": "SKU-00238",
+      "name": "Widget 238",
+      "qty": 35,
+      "status": "active",
+      "unit_price": 186.88
+    },
+    {
+      "sku": "SKU-00239",
+      "name": "Widget 239",
+      "qty": 38,
+      "status": "archived",
+      "unit_price": 339.67
+    },
+    {
+      "sku": "SKU-00240",
+      "name": "Widget 240",
+      "qty": 41,
+      "status": "inactive",
+      "unit_price": 447.14
+    },
+    {
+      "sku": "SKU-00241",
+      "name": "Widget 241",
+      "qty": 44,
+      "status": "archived",
+      "unit_price": 252.27
+    },
+    {
+      "sku": "SKU-00242",
+      "name": "Widget 242",
+      "qty": 47,
+      "status": "pending",
+      "unit_price": 386.34
+    },
+    {
+      "sku": "SKU-00243",
+      "name": "Widget 243",
+      "qty": 50,
+      "status": "archived",
+      "unit_price": 358.48
+    },
+    {
+      "sku": "SKU-00244",
+      "name": "Widget 244",
+      "qty": 53,
+      "status": "active",
+      "unit_price": 112.78
+    },
+    {
+      "sku": "SKU-00245",
+      "name": "Widget 245",
+      "qty": 56,
+      "status": "archived",
+      "unit_price": 396.36
+    },
+    {
+      "sku": "SKU-00246",
+      "name": "Widget 246",
+      "qty": 59,
+      "status": "active",
+      "unit_price": 246.72
+    },
+    {
+      "sku": "SKU-00247",
+      "name": "Widget 247",
+      "qty": 62,
+      "status": "inactive",
+      "unit_price": 295.65
+    },
+    {
+      "sku": "SKU-00248",
+      "name": "Widget 248",
+      "qty": 65,
+      "status": "pending",
+      "unit_price": 434.35
+    },
+    {
+      "sku": "SKU-00249",
+      "name": "Widget 249",
+      "qty": 68,
+      "status": "pending",
+      "unit_price": 91.11
+    },
+    {
+      "sku": "SKU-00250",
+      "name": "Widget 250",
+      "qty": 71,
+      "status": "pending",
+      "unit_price": 179.85
+    },
+    {
+      "sku": "SKU-00251",
+      "name": "Widget 251",
+      "qty": 74,
+      "status": "active",
+      "unit_price": 246.48
+    },
+    {
+      "sku": "SKU-00252",
+      "name": "Widget 252",
+      "qty": 77,
+      "status": "inactive",
+      "unit_price": 304.59
+    },
+    {
+      "sku": "SKU-00253",
+      "name": "Widget 253",
+      "qty": 80,
+      "status": "archived",
+      "unit_price": 265.5
+    },
+    {
+      "sku": "SKU-00254",
+      "name": "Widget 254",
+      "qty": 83,
+      "status": "archived",
+      "unit_price": 301.94
+    },
+    {
+      "sku": "SKU-00255",
+      "name": "Widget 255",
+      "qty": 86,
+      "status": "archived",
+      "unit_price": 422.5
+    },
+    {
+      "sku": "SKU-00256",
+      "name": "Widget 256",
+      "qty": 89,
+      "status": "inactive",
+      "unit_price": 43.48
+    },
+    {
+      "sku": "SKU-00257",
+      "name": "Widget 257",
+      "qty": 92,
+      "status": "pending",
+      "unit_price": 12.55
+    },
+    {
+      "sku": "SKU-00258",
+      "name": "Widget 258",
+      "qty": 95,
+      "status": "active",
+      "unit_price": 192.38
+    },
+    {
+      "sku": "SKU-00259",
+      "name": "Widget 259",
+      "qty": 1,
+      "status": "inactive",
+      "unit_price": 297.57
+    },
+    {
+      "sku": "SKU-00260",
+      "name": "Widget 260",
+      "qty": 4,
+      "status": "pending",
+      "unit_price": 452.62
+    },
+    {
+      "sku": "SKU-00261",
+      "name": "Widget 261",
+      "qty": 7,
+      "status": "active",
+      "unit_price": 124.48
+    },
+    {
+      "sku": "SKU-00262",
+      "name": "Widget 262",
+      "qty": 10,
+      "status": "inactive",
+      "unit_price": 25.08
+    },
+    {
+      "sku": "SKU-00263",
+      "name": "Widget 263",
+      "qty": 13,
+      "status": "pending",
+      "unit_price": 356.09
+    },
+    {
+      "sku": "SKU-00264",
+      "name": "Widget 264",
+      "qty": 16,
+      "status": "active",
+      "unit_price": 147.1
+    },
+    {
+      "sku": "SKU-00265",
+      "name": "Widget 265",
+      "qty": 19,
+      "status": "inactive",
+      "unit_price": 478.51
+    },
+    {
+      "sku": "SKU-00266",
+      "name": "Widget 266",
+      "qty": 22,
+      "status": "active",
+      "unit_price": 256.19
+    },
+    {
+      "sku": "SKU-00267",
+      "name": "Widget 267",
+      "qty": 25,
+      "status": "archived",
+      "unit_price": 453.05
+    },
+    {
+      "sku": "SKU-00268",
+      "name": "Widget 268",
+      "qty": 28,
+      "status": "pending",
+      "unit_price": 374.4
+    },
+    {
+      "sku": "SKU-00269",
+      "name": "Widget 269",
+      "qty": 31,
+      "status": "active",
+      "unit_price": 189.67
+    },
+    {
+      "sku": "SKU-00270",
+      "name": "Widget 270",
+      "qty": 34,
+      "status": "inactive",
+      "unit_price": 97.55
+    },
+    {
+      "sku": "SKU-00271",
+      "name": "Widget 271",
+      "qty": 37,
+      "status": "pending",
+      "unit_price": 80.67
+    },
+    {
+      "sku": "SKU-00272",
+      "name": "Widget 272",
+      "qty": 40,
+      "status": "pending",
+      "unit_price": 371.25
+    },
+    {
+      "sku": "SKU-00273",
+      "name": "Widget 273",
+      "qty": 43,
+      "status": "inactive",
+      "unit_price": 73.68
+    },
+    {
+      "sku": "SKU-00274",
+      "name": "Widget 274",
+      "qty": 46,
+      "status": "inactive",
+      "unit_price": 378.86
+    },
+    {
+      "sku": "SKU-00275",
+      "name": "Widget 275",
+      "qty": 49,
+      "status": "pending",
+      "unit_price": 206.68
+    },
+    {
+      "sku": "SKU-00276",
+      "name": "Widget 276",
+      "qty": 52,
+      "status": "active",
+      "unit_price": 129.39
+    },
+    {
+      "sku": "SKU-00277",
+      "name": "Widget 277",
+      "qty": 55,
+      "status": "pending",
+      "unit_price": 487.87
+    },
+    {
+      "sku": "SKU-00278",
+      "name": "Widget 278",
+      "qty": 58,
+      "status": "pending",
+      "unit_price": 465.23
+    },
+    {
+      "sku": "SKU-00279",
+      "name": "Widget 279",
+      "qty": 61,
+      "status": "active",
+      "unit_price": 308.39
+    },
+    {
+      "sku": "SKU-00280",
+      "name": "Widget 280",
+      "qty": 64,
+      "status": "active",
+      "unit_price": 219.45
+    },
+    {
+      "sku": "SKU-00281",
+      "name": "Widget 281",
+      "qty": 67,
+      "status": "inactive",
+      "unit_price": 449.16
+    },
+    {
+      "sku": "SKU-00282",
+      "name": "Widget 282",
+      "qty": 70,
+      "status": "active",
+      "unit_price": 170.97
+    },
+    {
+      "sku": "SKU-00283",
+      "name": "Widget 283",
+      "qty": 73,
+      "status": "pending",
+      "unit_price": 73.99
+    },
+    {
+      "sku": "SKU-00284",
+      "name": "Widget 284",
+      "qty": 76,
+      "status": "pending",
+      "unit_price": 198.82
+    },
+    {
+      "sku": "SKU-00285",
+      "name": "Widget 285",
+      "qty": 79,
+      "status": "active",
+      "unit_price": 190.32
+    },
+    {
+      "sku": "SKU-00286",
+      "name": "Widget 286",
+      "qty": 82,
+      "status": "pending",
+      "unit_price": 409.29
+    },
+    {
+      "sku": "SKU-00287",
+      "name": "Widget 287",
+      "qty": 85,
+      "status": "pending",
+      "unit_price": 417.24
+    },
+    {
+      "sku": "SKU-00288",
+      "name": "Widget 288",
+      "qty": 88,
+      "status": "inactive",
+      "unit_price": 9.11
+    },
+    {
+      "sku": "SKU-00289",
+      "name": "Widget 289",
+      "qty": 91,
+      "status": "archived",
+      "unit_price": 498.96
+    },
+    {
+      "sku": "SKU-00290",
+      "name": "Widget 290",
+      "qty": 94,
+      "status": "active",
+      "unit_price": 14.43
+    },
+    {
+      "sku": "SKU-00291",
+      "name": "Widget 291",
+      "qty": 0,
+      "status": "active",
+      "unit_price": 359.49
+    },
+    {
+      "sku": "SKU-00292",
+      "name": "Widget 292",
+      "qty": 3,
+      "status": "inactive",
+      "unit_price": 376.65
+    },
+    {
+      "sku": "SKU-00293",
+      "name": "Widget 293",
+      "qty": 6,
+      "status": "active",
+      "unit_price": 294.34
+    },
+    {
+      "sku": "SKU-00294",
+      "name": "Widget 294",
+      "qty": 9,
+      "status": "active",
+      "unit_price": 310.7
+    },
+    {
+      "sku": "SKU-00295",
+      "name": "Widget 295",
+      "qty": 12,
+      "status": "archived",
+      "unit_price": 79.22
+    },
+    {
+      "sku": "SKU-00296",
+      "name": "Widget 296",
+      "qty": 15,
+      "status": "active",
+      "unit_price": 141.06
+    },
+    {
+      "sku": "SKU-00297",
+      "name": "Widget 297",
+      "qty": 18,
+      "status": "archived",
+      "unit_price": 153.72
+    },
+    {
+      "sku": "SKU-00298",
+      "name": "Widget 298",
+      "qty": 21,
+      "status": "archived",
+      "unit_price": 198.24
+    },
+    {
+      "sku": "SKU-00299",
+      "name": "Widget 299",
+      "qty": 24,
+      "status": "active",
+      "unit_price": 108.71
+    },
+    {
+      "sku": "SKU-00300",
+      "name": "Widget 300",
+      "qty": 27,
+      "status": "pending",
+      "unit_price": 327.97
+    },
+    {
+      "sku": "SKU-00301",
+      "name": "Widget 301",
+      "qty": 30,
+      "status": "archived",
+      "unit_price": 161.81
+    },
+    {
+      "sku": "SKU-00302",
+      "name": "Widget 302",
+      "qty": 33,
+      "status": "active",
+      "unit_price": 261.32
+    },
+    {
+      "sku": "SKU-00303",
+      "name": "Widget 303",
+      "qty": 36,
+      "status": "inactive",
+      "unit_price": 127.56
+    },
+    {
+      "sku": "SKU-00304",
+      "name": "Widget 304",
+      "qty": 39,
+      "status": "archived",
+      "unit_price": 486.99
+    },
+    {
+      "sku": "SKU-00305",
+      "name": "Widget 305",
+      "qty": 42,
+      "status": "inactive",
+      "unit_price": 393.82
+    },
+    {
+      "sku": "SKU-00306",
+      "name": "Widget 306",
+      "qty": 45,
+      "status": "active",
+      "unit_price": 362.51
+    },
+    {
+      "sku": "SKU-00307",
+      "name": "Widget 307",
+      "qty": 48,
+      "status": "pending",
+      "unit_price": 84.82
+    },
+    {
+      "sku": "SKU-00308",
+      "name": "Widget 308",
+      "qty": 51,
+      "status": "inactive",
+      "unit_price": 35.78
+    },
+    {
+      "sku": "SKU-00309",
+      "name": "Widget 309",
+      "qty": 54,
+      "status": "pending",
+      "unit_price": 130.11
+    },
+    {
+      "sku": "SKU-00310",
+      "name": "Widget 310",
+      "qty": 57,
+      "status": "archived",
+      "unit_price": 334.99
+    },
+    {
+      "sku": "SKU-00311",
+      "name": "Widget 311",
+      "qty": 60,
+      "status": "active",
+      "unit_price": 46.77
+    },
+    {
+      "sku": "SKU-00312",
+      "name": "Widget 312",
+      "qty": 63,
+      "status": "active",
+      "unit_price": 397.97
+    },
+    {
+      "sku": "SKU-00313",
+      "name": "Widget 313",
+      "qty": 66,
+      "status": "pending",
+      "unit_price": 417.69
+    },
+    {
+      "sku": "SKU-00314",
+      "name": "Widget 314",
+      "qty": 69,
+      "status": "archived",
+      "unit_price": 156.35
+    },
+    {
+      "sku": "SKU-00315",
+      "name": "Widget 315",
+      "qty": 72,
+      "status": "archived",
+      "unit_price": 89.8
+    },
+    {
+      "sku": "SKU-00316",
+      "name": "Widget 316",
+      "qty": 75,
+      "status": "active",
+      "unit_price": 243.97
+    },
+    {
+      "sku": "SKU-00317",
+      "name": "Widget 317",
+      "qty": 78,
+      "status": "pending",
+      "unit_price": 416.49
+    },
+    {
+      "sku": "SKU-00318",
+      "name": "Widget 318",
+      "qty": 81,
+      "status": "active",
+      "unit_price": 427.52
+    },
+    {
+      "sku": "SKU-00319",
+      "name": "Widget 319",
+      "qty": 84,
+      "status": "inactive",
+      "unit_price": 437.36
+    },
+    {
+      "sku": "SKU-00320",
+      "name": "Widget 320",
+      "qty": 87,
+      "status": "active",
+      "unit_price": 360.09
+    },
+    {
+      "sku": "SKU-00321",
+      "name": "Widget 321",
+      "qty": 90,
+      "status": "archived",
+      "unit_price": 146.57
+    },
+    {
+      "sku": "SKU-00322",
+      "name": "Widget 322",
+      "qty": 93,
+      "status": "active",
+      "unit_price": 478.73
+    },
+    {
+      "sku": "SKU-00323",
+      "name": "Widget 323",
+      "qty": 96,
+      "status": "archived",
+      "unit_price": 286.51
+    },
+    {
+      "sku": "SKU-00324",
+      "name": "Widget 324",
+      "qty": 2,
+      "status": "inactive",
+      "unit_price": 310.43
+    },
+    {
+      "sku": "SKU-00325",
+      "name": "Widget 325",
+      "qty": 5,
+      "status": "inactive",
+      "unit_price": 294.11
+    },
+    {
+      "sku": "SKU-00326",
+      "name": "Widget 326",
+      "qty": 8,
+      "status": "active",
+      "unit_price": 148.44
+    },
+    {
+      "sku": "SKU-00327",
+      "name": "Widget 327",
+      "qty": 11,
+      "status": "archived",
+      "unit_price": 379.61
+    },
+    {
+      "sku": "SKU-00328",
+      "name": "Widget 328",
+      "qty": 14,
+      "status": "inactive",
+      "unit_price": 122.48
+    },
+    {
+      "sku": "SKU-00329",
+      "name": "Widget 329",
+      "qty": 17,
+      "status": "pending",
+      "unit_price": 248.51
+    },
+    {
+      "sku": "SKU-00330",
+      "name": "Widget 330",
+      "qty": 20,
+      "status": "pending",
+      "unit_price": 315.52
+    },
+    {
+      "sku": "SKU-00331",
+      "name": "Widget 331",
+      "qty": 23,
+      "status": "inactive",
+      "unit_price": 221.27
+    },
+    {
+      "sku": "SKU-00332",
+      "name": "Widget 332",
+      "qty": 26,
+      "status": "pending",
+      "unit_price": 385.42
+    },
+    {
+      "sku": "SKU-00333",
+      "name": "Widget 333",
+      "qty": 29,
+      "status": "archived",
+      "unit_price": 118.99
+    },
+    {
+      "sku": "SKU-00334",
+      "name": "Widget 334",
+      "qty": 32,
+      "status": "pending",
+      "unit_price": 129.41
+    },
+    {
+      "sku": "SKU-00335",
+      "name": "Widget 335",
+      "qty": 35,
+      "status": "active",
+      "unit_price": 428.05
+    },
+    {
+      "sku": "SKU-00336",
+      "name": "Widget 336",
+      "qty": 38,
+      "status": "inactive",
+      "unit_price": 493.21
+    },
+    {
+      "sku": "SKU-00337",
+      "name": "Widget 337",
+      "qty": 41,
+      "status": "active",
+      "unit_price": 191.49
+    },
+    {
+      "sku": "SKU-00338",
+      "name": "Widget 338",
+      "qty": 44,
+      "status": "inactive",
+      "unit_price": 396.39
+    },
+    {
+      "sku": "SKU-00339",
+      "name": "Widget 339",
+      "qty": 47,
+      "status": "pending",
+      "unit_price": 352.17
+    },
+    {
+      "sku": "SKU-00340",
+      "name": "Widget 340",
+      "qty": 50,
+      "status": "archived",
+      "unit_price": 490.49
+    },
+    {
+      "sku": "SKU-00341",
+      "name": "Widget 341",
+      "qty": 53,
+      "status": "active",
+      "unit_price": 187.09
+    },
+    {
+      "sku": "SKU-00342",
+      "name": "Widget 342",
+      "qty": 56,
+      "status": "active",
+      "unit_price": 441.36
+    },
+    {
+      "sku": "SKU-00343",
+      "name": "Widget 343",
+      "qty": 59,
+      "status": "active",
+      "unit_price": 304.01
+    },
+    {
+      "sku": "SKU-00344",
+      "name": "Widget 344",
+      "qty": 62,
+      "status": "active",
+      "unit_price": 11.32
+    },
+    {
+      "sku": "SKU-00345",
+      "name": "Widget 345",
+      "qty": 65,
+      "status": "active",
+      "unit_price": 267.45
+    },
+    {
+      "sku": "SKU-00346",
+      "name": "Widget 346",
+      "qty": 68,
+      "status": "archived",
+      "unit_price": 153.86
+    },
+    {
+      "sku": "SKU-00347",
+      "name": "Widget 347",
+      "qty": 71,
+      "status": "active",
+      "unit_price": 354.98
+    },
+    {
+      "sku": "SKU-00348",
+      "name": "Widget 348",
+      "qty": 74,
+      "status": "inactive",
+      "unit_price": 201.75
+    },
+    {
+      "sku": "SKU-00349",
+      "name": "Widget 349",
+      "qty": 77,
+      "status": "pending",
+      "unit_price": 386.2
+    },
+    {
+      "sku": "SKU-00350",
+      "name": "Widget 350",
+      "qty": 80,
+      "status": "inactive",
+      "unit_price": 498.17
+    },
+    {
+      "sku": "SKU-00351",
+      "name": "Widget 351",
+      "qty": 83,
+      "status": "archived",
+      "unit_price": 44.33
+    },
+    {
+      "sku": "SKU-00352",
+      "name": "Widget 352",
+      "qty": 86,
+      "status": "pending",
+      "unit_price": 475.35
+    },
+    {
+      "sku": "SKU-00353",
+      "name": "Widget 353",
+      "qty": 89,
+      "status": "inactive",
+      "unit_price": 38.6
+    },
+    {
+      "sku": "SKU-00354",
+      "name": "Widget 354",
+      "qty": 92,
+      "status": "pending",
+      "unit_price": 268.36
+    },
+    {
+      "sku": "SKU-00355",
+      "name": "Widget 355",
+      "qty": 95,
+      "status": "pending",
+      "unit_price": 219.95
+    },
+    {
+      "sku": "SKU-00356",
+      "name": "Widget 356",
+      "qty": 1,
+      "status": "pending",
+      "unit_price": 68.44
+    },
+    {
+      "sku": "SKU-00357",
+      "name": "Widget 357",
+      "qty": 4,
+      "status": "archived",
+      "unit_price": 39.63
+    },
+    {
+      "sku": "SKU-00358",
+      "name": "Widget 358",
+      "qty": 7,
+      "status": "active",
+      "unit_price": 349.82
+    },
+    {
+      "sku": "SKU-00359",
+      "name": "Widget 359",
+      "qty": 10,
+      "status": "active",
+      "unit_price": 259.58
+    },
+    {
+      "sku": "SKU-00360",
+      "name": "Widget 360",
+      "qty": 13,
+      "status": "archived",
+      "unit_price": 145.97
+    },
+    {
+      "sku": "SKU-00361",
+      "name": "Widget 361",
+      "qty": 16,
+      "status": "archived",
+      "unit_price": 210.24
+    },
+    {
+      "sku": "SKU-00362",
+      "name": "Widget 362",
+      "qty": 19,
+      "status": "pending",
+      "unit_price": 167.32
+    },
+    {
+      "sku": "SKU-00363",
+      "name": "Widget 363",
+      "qty": 22,
+      "status": "pending",
+      "unit_price": 7.14
+    },
+    {
+      "sku": "SKU-00364",
+      "name": "Widget 364",
+      "qty": 25,
+      "status": "inactive",
+      "unit_price": 415.45
+    },
+    {
+      "sku": "SKU-00365",
+      "name": "Widget 365",
+      "qty": 28,
+      "status": "archived",
+      "unit_price": 217.14
+    },
+    {
+      "sku": "SKU-00366",
+      "name": "Widget 366",
+      "qty": 31,
+      "status": "active",
+      "unit_price": 13.42
+    },
+    {
+      "sku": "SKU-00367",
+      "name": "Widget 367",
+      "qty": 34,
+      "status": "active",
+      "unit_price": 277.52
+    },
+    {
+      "sku": "SKU-00368",
+      "name": "Widget 368",
+      "qty": 37,
+      "status": "archived",
+      "unit_price": 238.18
+    },
+    {
+      "sku": "SKU-00369",
+      "name": "Widget 369",
+      "qty": 40,
+      "status": "pending",
+      "unit_price": 434.68
+    },
+    {
+      "sku": "SKU-00370",
+      "name": "Widget 370",
+      "qty": 43,
+      "status": "archived",
+      "unit_price": 40.88
+    },
+    {
+      "sku": "SKU-00371",
+      "name": "Widget 371",
+      "qty": 46,
+      "status": "archived",
+      "unit_price": 179.45
+    },
+    {
+      "sku": "SKU-00372",
+      "name": "Widget 372",
+      "qty": 49,
+      "status": "inactive",
+      "unit_price": 441.87
+    },
+    {
+      "sku": "SKU-00373",
+      "name": "Widget 373",
+      "qty": 52,
+      "status": "pending",
+      "unit_price": 444.04
+    },
+    {
+      "sku": "SKU-00374",
+      "name": "Widget 374",
+      "qty": 55,
+      "status": "active",
+      "unit_price": 183.18
+    },
+    {
+      "sku": "SKU-00375",
+      "name": "Widget 375",
+      "qty": 58,
+      "status": "active",
+      "unit_price": 400.56
+    },
+    {
+      "sku": "SKU-00376",
+      "name": "Widget 376",
+      "qty": 61,
+      "status": "pending",
+      "unit_price": 242.46
+    },
+    {
+      "sku": "SKU-00377",
+      "name": "Widget 377",
+      "qty": 64,
+      "status": "archived",
+      "unit_price": 210.92
+    },
+    {
+      "sku": "SKU-00378",
+      "name": "Widget 378",
+      "qty": 67,
+      "status": "active",
+      "unit_price": 344.36
+    },
+    {
+      "sku": "SKU-00379",
+      "name": "Widget 379",
+      "qty": 70,
+      "status": "active",
+      "unit_price": 141.22
+    },
+    {
+      "sku": "SKU-00380",
+      "name": "Widget 380",
+      "qty": 73,
+      "status": "active",
+      "unit_price": 60.76
+    },
+    {
+      "sku": "SKU-00381",
+      "name": "Widget 381",
+      "qty": 76,
+      "status": "archived",
+      "unit_price": 224.0
+    },
+    {
+      "sku": "SKU-00382",
+      "name": "Widget 382",
+      "qty": 79,
+      "status": "archived",
+      "unit_price": 226.63
+    },
+    {
+      "sku": "SKU-00383",
+      "name": "Widget 383",
+      "qty": 82,
+      "status": "inactive",
+      "unit_price": 50.21
+    },
+    {
+      "sku": "SKU-00384",
+      "name": "Widget 384",
+      "qty": 85,
+      "status": "inactive",
+      "unit_price": 301.16
+    },
+    {
+      "sku": "SKU-00385",
+      "name": "Widget 385",
+      "qty": 88,
+      "status": "archived",
+      "unit_price": 35.98
+    },
+    {
+      "sku": "SKU-00386",
+      "name": "Widget 386",
+      "qty": 91,
+      "status": "archived",
+      "unit_price": 46.4
+    },
+    {
+      "sku": "SKU-00387",
+      "name": "Widget 387",
+      "qty": 94,
+      "status": "inactive",
+      "unit_price": 353.63
+    },
+    {
+      "sku": "SKU-00388",
+      "name": "Widget 388",
+      "qty": 0,
+      "status": "pending",
+      "unit_price": 417.46
+    },
+    {
+      "sku": "SKU-00389",
+      "name": "Widget 389",
+      "qty": 3,
+      "status": "archived",
+      "unit_price": 297.47
+    },
+    {
+      "sku": "SKU-00390",
+      "name": "Widget 390",
+      "qty": 6,
+      "status": "pending",
+      "unit_price": 482.07
+    },
+    {
+      "sku": "SKU-00391",
+      "name": "Widget 391",
+      "qty": 9,
+      "status": "inactive",
+      "unit_price": 173.06
+    },
+    {
+      "sku": "SKU-00392",
+      "name": "Widget 392",
+      "qty": 12,
+      "status": "archived",
+      "unit_price": 271.99
+    },
+    {
+      "sku": "SKU-00393",
+      "name": "Widget 393",
+      "qty": 15,
+      "status": "archived",
+      "unit_price": 80.76
+    },
+    {
+      "sku": "SKU-00394",
+      "name": "Widget 394",
+      "qty": 18,
+      "status": "pending",
+      "unit_price": 347.79
+    },
+    {
+      "sku": "SKU-00395",
+      "name": "Widget 395",
+      "qty": 21,
+      "status": "active",
+      "unit_price": 30.49
+    },
+    {
+      "sku": "SKU-00396",
+      "name": "Widget 396",
+      "qty": 24,
+      "status": "archived",
+      "unit_price": 342.82
+    },
+    {
+      "sku": "SKU-00397",
+      "name": "Widget 397",
+      "qty": 27,
+      "status": "active",
+      "unit_price": 236.19
+    },
+    {
+      "sku": "SKU-00398",
+      "name": "Widget 398",
+      "qty": 30,
+      "status": "active",
+      "unit_price": 330.92
+    },
+    {
+      "sku": "SKU-00399",
+      "name": "Widget 399",
+      "qty": 33,
+      "status": "pending",
+      "unit_price": 122.02
+    }
+  ]
+}

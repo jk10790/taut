@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.count_archived[compressed]",
+  "request_key": "c1a16903f424a05bdef8551594924f47",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. How many items have status \"archived\"?",
+  "request_message_count": 0,
+  "response": {
+    "content": "30",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 1638,
+      "output_tokens": 1
+    }
+  }
+}

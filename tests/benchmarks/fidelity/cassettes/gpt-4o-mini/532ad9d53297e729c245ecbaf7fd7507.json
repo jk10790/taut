@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.count_refunds[raw]",
+  "request_key": "532ad9d53297e729c245ecbaf7fd7507",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. How many events have the action \"refund\"?",
+  "request_message_count": 0,
+  "response": {
+    "content": "20",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 7667,
+      "output_tokens": 1
+    }
+  }
+}

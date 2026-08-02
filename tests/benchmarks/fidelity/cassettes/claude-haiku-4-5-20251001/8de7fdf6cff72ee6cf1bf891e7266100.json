@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.lookup_latency[compressed]",
+  "request_key": "8de7fdf6cff72ee6cf1bf891e7266100",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. What is the latency_ms of event_id 57?",
+  "request_message_count": 0,
+  "response": {
+    "content": "553.39",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3442,
+      "output_tokens": 7
+    }
+  }
+}

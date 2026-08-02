@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.lookup_region[raw]",
+  "request_key": "4e386e5490ed002e29745076dd81f690",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Which region is event_id 57 in?",
+  "request_message_count": 0,
+  "response": {
+    "content": "us-east-1",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 7685,
+      "output_tokens": 8
+    }
+  }
+}

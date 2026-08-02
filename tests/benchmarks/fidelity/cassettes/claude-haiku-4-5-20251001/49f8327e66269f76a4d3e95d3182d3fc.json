@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.fastest_event[compressed]",
+  "request_key": "49f8327e66269f76a4d3e95d3182d3fc",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. Which event_id has the lowest latency_ms?",
+  "request_message_count": 0,
+  "response": {
+    "content": "80",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3441,
+      "output_tokens": 5
+    }
+  }
+}

@@ -1,4 +1,8 @@
 """YAGNI (You Aren't Gonna Need It) output restraint policy."""
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from taut.core.models import PipelineContext
 from .base import RestraintPolicy
 
 class YAGNIPolicy(RestraintPolicy):
