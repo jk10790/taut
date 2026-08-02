@@ -51,6 +51,7 @@ def test_every_shipped_claim_names_a_real_test():
         _test_names_in(CLAIM_TESTS)
         | _test_names_in(REPO / "tests" / "claims" / "test_docs_examples.py")
         | _test_names_in(REPO / "tests" / "benchmarks" / "test_fidelity.py")
+        | _test_names_in(REPO / "tests" / "unit" / "test_cache_guards.py")
     )
     missing = []
     for claim in _load():

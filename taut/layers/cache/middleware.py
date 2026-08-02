@@ -7,6 +7,7 @@ from taut.core.middleware import Middleware
 from taut.core.models import LLMRequest, LLMResponse, PipelineContext, LayerMetrics
 from taut.core.config import SemanticCacheConfig
 from .backends.base import CacheBackend, CacheEntry
+from .guards import blocks_reuse, discriminative_tokens
 
 logger = logging.getLogger("taut.cache")
 
@@ -69,6 +70,27 @@ class SemanticCacheMiddleware(Middleware):
         # collapsing distinct requests onto one key.
         return str(request)
 
+    def _guard_rejects(self, query_text: str, entry) -> bool:
+        """Veto a semantic hit whose numeric or date tokens differ.
+
+        The cached query text is carried in the entry's metadata. An entry
+        written before this guard existed has no such text; those are let
+        through rather than invalidated, since the alternative is silently
+        dropping every pre-upgrade cache entry.
+        """
+        if not self._config.discriminative_guard:
+            return False
+        cached_text = (entry.metadata or {}).get("cache_text")
+        if not cached_text:
+            return False
+        if blocks_reuse(query_text, cached_text):
+            logger.debug(
+                "semantic hit vetoed: numeric/date tokens differ "
+                f"({discriminative_tokens(query_text)} != {discriminative_tokens(cached_text)})"
+            )
+            return True
+        return False
+
     async def _embed_text(self, text: str) -> list[float]:
         if asyncio.iscoroutinefunction(self._embedder.embed):
             return await self._embedder.embed(text)
@@ -99,10 +121,18 @@ class SemanticCacheMiddleware(Middleware):
         embedding = None
         if self._config.similarity_threshold < 1.0:
             try:
-                embedding = await self._embed_text(self._cache_text(request))
+                query_text = self._cache_text(request)
+                embedding = await self._embed_text(query_text)
                 similar_hit = await self._backend.get_similar(
                     namespace, embedding, self._config.similarity_threshold
                 )
+                if similar_hit and self._guard_rejects(query_text, similar_hit):
+                    # Falls through to a miss. Recorded separately because the
+                    # status is overwritten with "miss" below, and a vetoed
+                    # lookup is worth distinguishing from a plain miss when
+                    # tuning the threshold.
+                    context.extra["cache_vetoed"] = True
+                    similar_hit = None
                 if similar_hit:
                     context.extra["cache_status"] = "semantic_hit"
                     self._record_metrics(context, hit=True)
@@ -122,7 +152,10 @@ class SemanticCacheMiddleware(Middleware):
                 key=cache_key,
                 embedding=embedding,
                 value=response,
-                ttl=float(self._config.ttl_seconds) if self._config.ttl_seconds else None
+                ttl=float(self._config.ttl_seconds) if self._config.ttl_seconds else None,
+                # The guard compares an incoming query against the query this
+                # entry was written for, so that text has to travel with it.
+                metadata={"cache_text": self._cache_text(request)},
             )
             await self._backend.put(namespace, entry)
         except Exception as e:
@@ -158,10 +191,18 @@ class SemanticCacheMiddleware(Middleware):
         embedding = None
         if self._config.similarity_threshold < 1.0:
             try:
-                embedding = await self._embed_text(self._cache_text(request))
+                query_text = self._cache_text(request)
+                embedding = await self._embed_text(query_text)
                 similar_hit = await self._backend.get_similar(
                     namespace, embedding, self._config.similarity_threshold
                 )
+                if similar_hit and self._guard_rejects(query_text, similar_hit):
+                    # Falls through to a miss. Recorded separately because the
+                    # status is overwritten with "miss" below, and a vetoed
+                    # lookup is worth distinguishing from a plain miss when
+                    # tuning the threshold.
+                    context.extra["cache_vetoed"] = True
+                    similar_hit = None
                 if similar_hit:
                     context.extra["cache_status"] = "semantic_hit"
                     self._record_metrics(context, hit=True)
@@ -199,7 +240,10 @@ class SemanticCacheMiddleware(Middleware):
                 key=cache_key,
                 embedding=embedding,
                 value=response,
-                ttl=float(self._config.ttl_seconds) if self._config.ttl_seconds else None
+                ttl=float(self._config.ttl_seconds) if self._config.ttl_seconds else None,
+                # The guard compares an incoming query against the query this
+                # entry was written for, so that text has to travel with it.
+                metadata={"cache_text": self._cache_text(request)},
             )
             await self._backend.put(namespace, entry)
         except Exception as e:

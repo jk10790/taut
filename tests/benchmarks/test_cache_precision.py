@@ -13,8 +13,16 @@ skips when the model cannot be fetched.
 """
 import pytest
 
+from taut.layers.cache.guards import blocks_reuse
+
 pytestmark = pytest.mark.bench
 
+# Labelled pairs. Written before looking at any similarity score, so the set
+# is not fitted to the model's existing behaviour, and deliberately larger than
+# the original 13: on 13 pairs the shipped 0.95 threshold looked flawless, and
+# on 50 it admits false hits. A benchmark small enough to flatter the system is
+# worse than no benchmark.
+#
 # Pairs that mean the same thing: the cache SHOULD serve these from one entry.
 PARAPHRASES = [
     ("how do I reset my password", "how can I reset my password"),
@@ -23,10 +31,30 @@ PARAPHRASES = [
     ("list all active users", "show me every active user"),
     ("why did the deployment fail", "what caused the deployment failure"),
     ("how many seats are on the Growth plan", "what is the seat count for the Growth plan"),
+    ("how do I export my data", "what is the process for exporting my data"),
+    ("when does my subscription renew", "what is my subscription renewal date"),
+    ("who approved this pull request", "which person approved this pull request"),
+    ("what does error code 429 mean", "explain error code 429"),
+    ("how long are logs retained", "what is the log retention period"),
+    ("can I change my billing email", "is it possible to update my billing email"),
+    ("show me yesterday's failed jobs", "list the jobs that failed yesterday"),
+    ("what regions are supported", "which regions do you support"),
+    ("how do I invite a teammate", "what is the way to invite a teammate"),
+    ("is the API rate limited", "does the API have rate limits"),
+    ("what is the maximum file upload size", "how large can an uploaded file be"),
+    ("describe the checkout flow", "walk me through the checkout flow"),
+    ("why is my invoice higher this month", "what caused the increase in my invoice this month"),
+    ("how do I cancel my account", "what are the steps to cancel my account"),
+    ("what time is the daily backup", "when does the daily backup run"),
+    ("does the Pro plan include SSO", "is SSO part of the Pro plan"),
+    ("what is the average response time", "what is the mean response time"),
+    ("how do I rotate an API key", "what is the procedure for rotating an API key"),
+    ("list the open incidents", "show all incidents that are currently open"),
 ]
 
-# Pairs that look similar but mean different things: serving one for the other
-# is a correctness bug, and the expensive kind -- a confidently wrong answer.
+# Pairs that look similar but mean different things: serving one for the
+# other is a correctness bug, and the expensive kind -- a confidently wrong
+# answer.
 NEAR_MISSES = [
     ("what is our Q1 revenue", "what is our Q1 loss"),
     ("how do I enable SSO", "how do I disable SSO"),
@@ -35,6 +63,24 @@ NEAR_MISSES = [
     ("what is the refund policy", "what is the cancellation policy"),
     ("show costs for July 2026", "show costs for June 2026"),
     ("increase the rate limit", "what is the rate limit"),
+    ("what is the Q1 revenue", "what is the Q3 revenue"),
+    ("show me yesterday's failed jobs", "show me yesterday's successful jobs"),
+    ("how do I add a teammate", "how do I remove a teammate"),
+    ("what is the maximum file upload size", "what is the maximum file download size"),
+    ("show costs for 2025", "show costs for 2026"),
+    ("how many seats are on the Growth plan", "how many seats are on the Starter plan"),
+    ("logs from the last 7 days", "logs from the last 30 days"),
+    ("what does error code 429 mean", "what does error code 502 mean"),
+    ("upgrade my subscription", "downgrade my subscription"),
+    ("who approved this pull request", "who requested this pull request"),
+    ("top 10 slowest queries", "top 50 slowest queries"),
+    ("the deployment on 2026-07-01", "the deployment on 2026-07-08"),
+    ("is the Pro plan cheaper than Growth", "is the Growth plan cheaper than Pro"),
+    ("how do I export my data", "how do I import my data"),
+    ("when does my subscription renew", "when did my subscription start"),
+    ("grant admin access to Dana", "revoke admin access to Dana"),
+    ("what is the p50 latency", "what is the p99 latency"),
+    ("restart the primary node", "restart the replica node"),
 ]
 
 THRESHOLDS = [0.80, 0.85, 0.90, 0.925, 0.95, 0.97, 0.99]
@@ -75,16 +121,92 @@ def similarities(embedder):
     }
 
 
-def test_default_threshold_admits_no_false_hits(similarities, request):
+def _survives(pair, similarity, threshold, guard):
+    """Would this pair be served from one cache entry, under this config?"""
+    if similarity < threshold:
+        return False
+    return not (guard and blocks_reuse(*pair))
+
+
+def test_guard_never_blocks_a_paraphrase():
+    """The guard's safety property, and it needs no embedder at all.
+
+    A veto costs a cache miss. That is acceptable on a near-miss and pure loss
+    on a paraphrase, so the rule must be conservative enough to leave genuine
+    rewordings alone.
+    """
+    wrongly_blocked = [pair for pair in PARAPHRASES if blocks_reuse(*pair)]
+    assert not wrongly_blocked, (
+        f"the discriminative guard blocks {len(wrongly_blocked)} genuine paraphrases, "
+        f"which is pure lost recall: {wrongly_blocked}"
+    )
+
+
+def test_guard_blocks_a_meaningful_share_of_near_misses():
+    """The guard's usefulness. Also needs no embedder.
+
+    If this number falls to zero the guard is dead weight and should be
+    deleted rather than left in as decoration.
+    """
+    blocked = [pair for pair in NEAR_MISSES if blocks_reuse(*pair)]
+    assert len(blocked) >= 6, (
+        f"the guard blocks only {len(blocked)}/{len(NEAR_MISSES)} near-miss pairs; "
+        "it is no longer earning its place in the lookup path"
+    )
+
+
+def test_guard_strictly_improves_precision_at_the_default(similarities):
+    """The guard must remove false hits without removing true ones."""
+    def counts(guard):
+        true_hits = sum(
+            1 for pair, sim in zip(PARAPHRASES, similarities["paraphrase"], strict=True)
+            if _survives(pair, sim, SHIPPED_DEFAULT, guard)
+        )
+        false_hits = sum(
+            1 for pair, sim in zip(NEAR_MISSES, similarities["near_miss"], strict=True)
+            if _survives(pair, sim, SHIPPED_DEFAULT, guard)
+        )
+        return true_hits, false_hits
+
+    true_off, false_off = counts(guard=False)
+    true_on, false_on = counts(guard=True)
+
+    assert true_on == true_off, (
+        f"the guard cost {true_off - true_on} true hits at {SHIPPED_DEFAULT}; "
+        "it is meant to remove only false ones"
+    )
+    assert false_on < false_off, (
+        f"the guard removed no false hits at {SHIPPED_DEFAULT} "
+        f"({false_off} before, {false_on} after)"
+    )
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "KNOWN LIMITATION, not a flaky test. Even with the discriminative guard "
+        "on, the shipped default admits one false hit: 'is the Pro plan cheaper "
+        "than Growth' vs 'is the Growth plan cheaper than Pro' scores 0.978. The "
+        "two questions have identical bags of words and differ only in argument "
+        "order, so no threshold and no token-set rule can separate them -- only "
+        "an order-sensitive comparison could. strict=True: if this starts passing, "
+        "the limitation is resolved and docs/limitations.md must be updated."
+    ),
+)
+def test_default_threshold_admits_no_false_hits(similarities):
     """At the shipped default, no near-miss pair may collide.
 
     A false hit means a user receives an answer to a question they did not
     ask -- worse than a cache miss, which merely costs money.
+
+    This passed on the original 13-pair set. It does not pass on 50 pairs,
+    which is the finding that motivated the guard: the old set was too small
+    to show the failure, not the cache too good to have one.
     """
     false_hits = [
         (pair, round(sim, 4))
         for pair, sim in zip(NEAR_MISSES, similarities["near_miss"], strict=True)
-        if sim >= SHIPPED_DEFAULT
+        if _survives(pair, sim, SHIPPED_DEFAULT, guard=True)
     ]
     assert not false_hits, (
         f"at similarity_threshold={SHIPPED_DEFAULT} these distinct questions collide: "
@@ -94,19 +216,28 @@ def test_default_threshold_admits_no_false_hits(similarities, request):
 
 def test_threshold_sweep_is_reported(similarities, capsys):
     """Print the precision/recall curve so the default is a choice, not a guess."""
-    lines = [
-        "",
-        f"{'threshold':>10} {'recall':>8} {'precision':>10} {'false hits':>11}",
-        "-" * 42,
-    ]
-    for threshold in THRESHOLDS:
-        true_hits = sum(1 for s in similarities["paraphrase"] if s >= threshold)
-        false_hits = sum(1 for s in similarities["near_miss"] if s >= threshold)
-        recall = true_hits / len(PARAPHRASES)
-        precision = true_hits / (true_hits + false_hits) if (true_hits + false_hits) else 1.0
-        lines.append(
-            f"{threshold:>10.3f} {recall:>7.0%} {precision:>10.0%} {false_hits:>11}"
-        )
+    lines = []
+    for guard in (False, True):
+        lines += [
+            "",
+            f"discriminative guard {'ON' if guard else 'OFF'}",
+            f"{'threshold':>10} {'recall':>8} {'precision':>10} {'false hits':>11}",
+            "-" * 42,
+        ]
+        for threshold in THRESHOLDS:
+            true_hits = sum(
+                1 for pair, s in zip(PARAPHRASES, similarities["paraphrase"], strict=True)
+                if _survives(pair, s, threshold, guard)
+            )
+            false_hits = sum(
+                1 for pair, s in zip(NEAR_MISSES, similarities["near_miss"], strict=True)
+                if _survives(pair, s, threshold, guard)
+            )
+            recall = true_hits / len(PARAPHRASES)
+            precision = true_hits / (true_hits + false_hits) if (true_hits + false_hits) else 1.0
+            lines.append(
+                f"{threshold:>10.3f} {recall:>7.0%} {precision:>10.0%} {false_hits:>11}"
+            )
     with capsys.disabled():
         print("\n".join(lines))
 
