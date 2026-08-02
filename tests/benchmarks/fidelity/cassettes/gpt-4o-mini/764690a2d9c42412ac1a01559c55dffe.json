@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.top_region[raw]",
+  "request_key": "764690a2d9c42412ac1a01559c55dffe",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Which region appears most often?",
+  "request_message_count": 0,
+  "response": {
+    "content": "ap-south-1",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 7664,
+      "output_tokens": 5
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "faq.starter_seats[raw]",
+  "request_key": "d8d641e48f2cba9c6ecb568582c650da",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. How many seats does the Starter plan include?",
+  "request_message_count": 0,
+  "response": {
+    "content": "The Starter plan includes up to five seats.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 398,
+      "output_tokens": 9
+    }
+  }
+}

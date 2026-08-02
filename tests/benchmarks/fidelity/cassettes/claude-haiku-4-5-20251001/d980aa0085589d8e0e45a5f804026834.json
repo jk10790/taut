@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "faq.starter_seats[compressed]",
+  "request_key": "d980aa0085589d8e0e45a5f804026834",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. How many seats does the Starter plan include?",
+  "request_message_count": 0,
+  "response": {
+    "content": "The Starter plan includes up to five seats.",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 415,
+      "output_tokens": 13
+    }
+  }
+}

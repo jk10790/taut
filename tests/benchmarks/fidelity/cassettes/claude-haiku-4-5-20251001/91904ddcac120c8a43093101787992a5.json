@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.lookup_price[raw]",
+  "request_key": "91904ddcac120c8a43093101787992a5",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What is the unit_price of SKU-00042?",
+  "request_message_count": 0,
+  "response": {
+    "content": "358.64",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3691,
+      "output_tokens": 7
+    }
+  }
+}

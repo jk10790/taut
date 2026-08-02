@@ -83,6 +83,22 @@ def yes_no(expected: bool) -> Callable[[str], bool]:
     return grade
 
 
+def only_of(expected: str, *alternatives: str) -> Callable[[str], bool]:
+    """True if the answer names `expected` and none of the other valid values.
+
+    Needed for lookup tasks over a categorical field: plain substring matching
+    would score "not archived, it is active" as correct because "archived" is
+    present. The alternatives are the field's other values in this corpus.
+    """
+
+    def grade(answer: str) -> bool:
+        text = answer.lower()
+        return expected.lower() in text and not any(alt.lower() in text for alt in alternatives)
+
+    grade.__doc__ = f"names {expected!r} and none of {alternatives}"
+    return grade
+
+
 def exact(expected: str) -> Callable[[str], bool]:
     def grade(answer: str) -> bool:
         return answer.strip().strip(".").lower() == expected.strip().lower()
@@ -130,6 +146,24 @@ class FidelityTask:
     question: str
     grader: Callable[[str], bool]
     kind: str  # which compressor this exercises
+    probe: str = ""  # experiment arm, for the JSON tasks -- see PROBES
+
+
+# Arms of the aggregation experiment. `inventory.priciest_sku` regressed under
+# compression with only a 0.2% gap between the right answer and the runner-up,
+# which is consistent with two different stories:
+#
+#   knife-edge noise -- the model cannot reliably separate near-ties, and the
+#     columnar payload is merely a different roll of the same dice; or
+#   format damage    -- the columnar layout systematically hurts scanning a
+#     column for an extremum.
+#
+# These arms separate them. `narrow` gaps are <2%, `wide` gaps are >35%, and
+# `lookup` reads a single named row so it exercises retrieval without any
+# scan-and-compare. If only `narrow` regresses, it is noise. If `wide`
+# regresses too, or `lookup` stays clean while both aggregation arms break,
+# the format is at fault.
+PROBES = ("narrow", "wide", "lookup")
 
 
 def build_tasks() -> list[FidelityTask]:
@@ -141,7 +175,26 @@ def build_tasks() -> list[FidelityTask]:
     refunds = sum(1 for e in events if e["action"] == "refund")
 
     archived = sum(1 for i in inventory["items"] if i["status"] == "archived")
-    priciest = max(inventory["items"], key=lambda i: i["unit_price"])["sku"]
+    items = inventory["items"]
+
+    # Aggregation targets, all computed. Gaps in this corpus slice:
+    #   priciest   499.60 vs 498.50   0.2%  narrow
+    #   biggest_qty     96 vs 95      1.0%  narrow
+    #   slowest     887.04 vs 880.55  0.7%  narrow
+    #   cheapest     12.42 vs 20.60  39.7%  wide
+    #   fastest       10.60 vs 16.52 35.8%  wide
+    priciest = max(items, key=lambda i: i["unit_price"])["sku"]
+    cheapest = min(items, key=lambda i: i["unit_price"])["sku"]
+    biggest_qty = max(items, key=lambda i: i["qty"])["sku"]
+    slowest_event = max(events, key=lambda e: e["latency_ms"])["event_id"]
+    fastest_event = min(events, key=lambda e: e["latency_ms"])["event_id"]
+
+    # Retrieval controls. Mid-corpus rows, so neither is findable by guessing
+    # the first or last record.
+    probe_item = next(i for i in items if i["sku"] == "SKU-00042")
+    probe_event = next(e for e in events if e["event_id"] == 57)
+    statuses = sorted({i["status"] for i in items})
+    regions = sorted({e["region"] for e in events})
 
     brief = "Answer using only the provided context. Reply with the answer alone and nothing else."
 
@@ -181,6 +234,80 @@ def build_tasks() -> list[FidelityTask]:
             question=f"{brief} Which SKU has the highest unit_price?",
             grader=contains_any(priciest),
             kind="json",
+            probe="narrow",
+        ),
+        # ---- Aggregation experiment: narrow gaps ----
+        FidelityTask(
+            id="inventory.biggest_qty_sku",
+            context=inventory_context(),
+            question=f"{brief} Which SKU has the highest qty?",
+            grader=contains_any(biggest_qty),
+            kind="json",
+            probe="narrow",
+        ),
+        FidelityTask(
+            id="events.slowest_event",
+            context=events_context(),
+            question=f"{brief} Which event_id has the highest latency_ms?",
+            grader=numeric(slowest_event),
+            kind="json",
+            probe="narrow",
+        ),
+        # ---- Aggregation experiment: wide gaps ----
+        FidelityTask(
+            id="inventory.cheapest_sku",
+            context=inventory_context(),
+            question=f"{brief} Which SKU has the lowest unit_price?",
+            grader=contains_any(cheapest),
+            kind="json",
+            probe="wide",
+        ),
+        FidelityTask(
+            id="events.fastest_event",
+            context=events_context(),
+            question=f"{brief} Which event_id has the lowest latency_ms?",
+            grader=numeric(fastest_event),
+            kind="json",
+            probe="wide",
+        ),
+        # ---- Retrieval controls: one named row, no scan-and-compare ----
+        FidelityTask(
+            id="inventory.lookup_status",
+            context=inventory_context(),
+            question=f'{brief} What is the status of {probe_item["sku"]}?',
+            grader=only_of(
+                probe_item["status"],
+                *[s for s in statuses if s != probe_item["status"]],
+            ),
+            kind="json",
+            probe="lookup",
+        ),
+        FidelityTask(
+            id="inventory.lookup_price",
+            context=inventory_context(),
+            question=f'{brief} What is the unit_price of {probe_item["sku"]}?',
+            grader=numeric(probe_item["unit_price"]),
+            kind="json",
+            probe="lookup",
+        ),
+        FidelityTask(
+            id="events.lookup_region",
+            context=events_context(),
+            question=f'{brief} Which region is event_id {probe_event["event_id"]} in?',
+            grader=only_of(
+                probe_event["region"],
+                *[r for r in regions if r != probe_event["region"]],
+            ),
+            kind="json",
+            probe="lookup",
+        ),
+        FidelityTask(
+            id="events.lookup_latency",
+            context=events_context(),
+            question=f'{brief} What is the latency_ms of event_id {probe_event["event_id"]}?',
+            grader=numeric(probe_event["latency_ms"]),
+            kind="json",
+            probe="lookup",
         ),
         # ---- Python: stripping docstrings must not change behaviour ----
         FidelityTask(

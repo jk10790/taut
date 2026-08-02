@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.cheapest_sku[raw]",
+  "request_key": "ff40b766e5a185a95dfbb74a1e428340",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Which SKU has the lowest unit_price?",
+  "request_message_count": 0,
+  "response": {
+    "content": "SKU-00031",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3688,
+      "output_tokens": 8
+    }
+  }
+}

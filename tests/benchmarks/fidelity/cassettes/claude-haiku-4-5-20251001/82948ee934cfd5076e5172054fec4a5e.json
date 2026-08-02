@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.count_refunds[raw]",
+  "request_key": "82948ee934cfd5076e5172054fec4a5e",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. How many events have the action \"refund\"?",
+  "request_message_count": 0,
+  "response": {
+    "content": "30",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 7685,
+      "output_tokens": 5
+    }
+  }
+}

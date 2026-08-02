@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "postmortem.rollback_time[compressed]",
+  "request_key": "993cbbd9eaaa5623682ab85e4804f6b6",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. At what time was the previous configuration reapplied?",
+  "request_message_count": 0,
+  "response": {
+    "content": "09:44 UTC",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 617,
+      "output_tokens": 9
+    }
+  }
+}

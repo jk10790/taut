@@ -297,13 +297,40 @@ claims:
     claim: Compression does not change the model's answer to a question about the payload.
     source: README.md
     test: tests/benchmarks/test_fidelity.py::test_compression_causes_no_answer_regressions
-    status: unverified
+    status: shipped
     note: >
-      This is the product brief's actual north star ("without degrading the
-      accuracy of the AI's output") and it has never been measured. The test
-      and the 14-task set exist and run from committed cassettes, but no
-      cassettes have been recorded yet, so the suite skips. Recording is a
-      local, key-in-hand operation: `python scripts/record_fidelity.py --record`
-      (~$0.09 for both providers). test_manifest.py cross-checks this status
-      against cassette presence, so once cassettes land this must be promoted
-      to `shipped` or CI fails. Until then the claim must not appear in the docs.
+      Measured, and true with one documented exception. 22 tasks recorded
+      against gpt-4o-mini and claude-haiku-4-5-20251001 at temperature 0, run
+      from committed cassettes on every PR. Compression saved 52-56% of context
+      tokens with zero regressions on claude-haiku-4-5 (18/22 correct on both
+      raw and compressed payloads) and zero regressions on code, prose, chat
+      and single-row-retrieval tasks for either model.
+      The exception: gpt-4o-mini loses column alignment in the columnar JSON
+      layout and misreads scan-and-compare aggregations ("which row has the
+      highest X") over 100 rows, answering with a neighbouring column's value.
+      Three tasks regress; they are enumerated in KNOWN_REGRESSIONS in
+      tests/benchmarks/test_fidelity.py and documented in docs/limitations.md
+      under "Columnar JSON costs small models their column alignment". The
+      suite fails if that list grows or if a listed case stops regressing, so
+      the exemption cannot rot.
+      Consequently the unqualified phrasings ("without degrading the accuracy
+      of the AI's output") remain forbidden in docs prose -- see the forbidden
+      patterns in tests/claims/test_manifest.py. State the scope, not the
+      slogan. Re-record with `python scripts/record_fidelity.py --record`
+      (~$0.20 for both providers).
+
+  - id: fidelity.retrieval_survives_compression
+    claim: >
+      Compression never changes the answer to a question about a single named
+      record in the payload.
+    source: docs/limitations.md
+    test: tests/benchmarks/test_fidelity.py::test_compression_never_regresses_retrieval
+    status: shipped
+    note: >
+      The unconditional half of the fidelity result, and the reason the
+      documented aggregation failure is described as a scanning limit rather
+      than data loss. Four retrieval tasks -- the status and unit_price of a
+      mid-corpus SKU, the region and latency_ms of a mid-corpus event -- are
+      answered correctly on both raw and compressed payloads by both recorded
+      models. This test carries no exemption list, unlike
+      fidelity.compression_preserves_answers.

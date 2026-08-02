@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "faq.backup_purge_days[compressed]",
+  "request_key": "fa4160301d57d8055fece78a837002ec",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Within how many days are deleted records purged from backups?",
+  "request_message_count": 0,
+  "response": {
+    "content": "35 days",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 417,
+      "output_tokens": 7
+    }
+  }
+}

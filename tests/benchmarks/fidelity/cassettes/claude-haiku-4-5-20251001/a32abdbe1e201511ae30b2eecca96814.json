@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "postmortem.pool_size[raw]",
+  "request_key": "a32abdbe1e201511ae30b2eecca96814",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What was the maximum connection pool size reduced to?",
+  "request_message_count": 0,
+  "response": {
+    "content": "60 connections",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 629,
+      "output_tokens": 7
+    }
+  }
+}

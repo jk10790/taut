@@ -97,10 +97,18 @@ def test_unimplemented_claims_are_not_asserted_in_the_docs():
         ],
     }
 
+    # Claims that are measured and shipped, but only within a stated scope.
+    # The blanket phrasings stay banned regardless of status: fidelity holds
+    # for retrieval, code and prose on both recorded models and for every task
+    # on claude-haiku-4-5, but gpt-4o-mini misreads columnar aggregations. See
+    # docs/limitations.md. Promoting the claim to "shipped" must not silently
+    # unlock the slogan the measurement does not support.
+    SCOPED = {"fidelity.compression_preserves_answers"}
+
     unproven = {c["id"] for c in _load() if c["status"] in ("unimplemented", "unverified")}
     violations = []
     for claim_id, patterns in forbidden.items():
-        if claim_id not in unproven:
+        if claim_id not in unproven and claim_id not in SCOPED:
             continue
         for pattern in patterns:
             match = re.search(pattern, docs_text)

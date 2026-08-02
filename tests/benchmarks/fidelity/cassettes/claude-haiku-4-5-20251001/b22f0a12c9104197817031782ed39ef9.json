@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.top_region[compressed]",
+  "request_key": "b22f0a12c9104197817031782ed39ef9",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. Which region appears most often?",
+  "request_message_count": 0,
+  "response": {
+    "content": "eu-west-2",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3436,
+      "output_tokens": 8
+    }
+  }
+}

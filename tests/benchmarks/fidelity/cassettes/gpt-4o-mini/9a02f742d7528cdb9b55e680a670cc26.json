@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "postmortem.pool_size[raw]",
+  "request_key": "9a02f742d7528cdb9b55e680a670cc26",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What was the maximum connection pool size reduced to?",
+  "request_message_count": 0,
+  "response": {
+    "content": "60",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 611,
+      "output_tokens": 1
+    }
+  }
+}

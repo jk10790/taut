@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.priciest_sku[compressed]",
+  "request_key": "5367e270a6e754d222eaa01e31ae4e91",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. Which SKU has the highest unit_price?",
+  "request_message_count": 0,
+  "response": {
+    "content": "SKU-00028",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 1637,
+      "output_tokens": 4
+    }
+  }
+}

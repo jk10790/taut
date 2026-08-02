@@ -38,6 +38,7 @@ MAX_ANSWER_TOKENS = 64
 class TaskOutcome:
     task_id: str
     kind: str
+    probe: str
     model: str
     raw_answer: str
     compressed_answer: str
@@ -124,6 +125,7 @@ async def run_task(
     return TaskOutcome(
         task_id=task.id,
         kind=task.kind,
+        probe=task.probe,
         model=model,
         raw_answer=raw_answer,
         compressed_answer=compressed_answer,
@@ -163,4 +165,20 @@ def summarise(outcomes: list[TaskOutcome]) -> str:
         f"regressions caused by taut    : {regressions}",
         f"context tokens saved overall  : {overall:.1f}%",
     ]
+
+    # Per-arm breakdown of the aggregation experiment. Regressions concentrated
+    # in `narrow` read as near-tie noise; regressions in `wide` or `lookup`
+    # read as the columnar format itself losing information.
+    probed = [o for o in outcomes if o.probe]
+    if probed:
+        lines.append("")
+        lines.append(f"{'probe':8} {'tasks':>5} {'raw':>5} {'comp':>5} {'regressions':>12}")
+        for probe in sorted({o.probe for o in probed}):
+            arm = [o for o in probed if o.probe == probe]
+            lines.append(
+                f"{probe:8} {len(arm):>5} "
+                f"{sum(1 for o in arm if o.raw_correct):>5} "
+                f"{sum(1 for o in arm if o.compressed_correct):>5} "
+                f"{sum(1 for o in arm if o.regressed):>12}"
+            )
     return "\n".join(lines)

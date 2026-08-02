@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "faq.backup_purge_days[raw]",
+  "request_key": "5c080137e047dd4697c2a11e4e6b3b85",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Within how many days are deleted records purged from backups?",
+  "request_message_count": 0,
+  "response": {
+    "content": "Deleted records are purged from backups within thirty-five days.",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 401,
+      "output_tokens": 12
+    }
+  }
+}

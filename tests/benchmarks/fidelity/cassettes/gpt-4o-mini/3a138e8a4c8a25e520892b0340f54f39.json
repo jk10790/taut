@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.slowest_event[raw]",
+  "request_key": "3a138e8a4c8a25e520892b0340f54f39",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Which event_id has the highest latency_ms?",
+  "request_message_count": 0,
+  "response": {
+    "content": "74",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 7667,
+      "output_tokens": 1
+    }
+  }
+}

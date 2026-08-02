@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.count_archived[raw]",
+  "request_key": "6b2ffad6005251a3531c7b806930d073",
+  "request_model": "gpt-4o-mini",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. How many items have status \"archived\"?",
+  "request_message_count": 0,
+  "response": {
+    "content": "20",
+    "model": "gpt-4o-mini-2024-07-18",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3857,
+      "output_tokens": 1
+    }
+  }
+}

@@ -17,6 +17,64 @@ If your context is mostly retrieved natural-language documents, `taut`'s
 compression layer will not shrink it. Use the caching and routing layers, and
 handle document reduction before it reaches `taut`.
 
+## Columnar JSON costs small models their column alignment
+
+`JSONCompressor` turns an array of uniform records into a header plus rows:
+
+```
+COLS: event_id | user_id | action | status_code | region | latency_ms | timestamp
+0 | 1000 | login | 404 | ap-south-1 | 414.66 | 2026-07-01T00:15:00Z
+1 | 1001 | login | 201 | eu-west-2 | 470.31 | 2026-07-02T01:15:00Z
+```
+
+The transform is lossless — every value survives — and it is where roughly 55%
+of the measured token saving comes from. But the column names appear *once*, at
+the top. A weaker model reading row 74 has to carry seven column positions in
+its head across a hundred lines, and some cannot.
+
+Measured by the fidelity suite (`tests/benchmarks/test_fidelity.py`, 22 tasks,
+both models recorded at temperature 0):
+
+| task arm | what it asks | gpt-4o-mini raw → compressed | claude-haiku-4-5 raw → compressed |
+|---|---|---|---|
+| retrieval (4 tasks) | one named row, e.g. the status of `SKU-00042` | 4 → 4 | 4 → 4 |
+| aggregation, narrow gap (3) | extremum where the runner-up is within 2% | 2 → **0** | 3 → 3 |
+| aggregation, wide gap (2) | extremum where the runner-up is 35%+ away | 1 → **0** | 1 → 1 |
+
+The failure is specific and visible in the answers. Asked which `event_id` has
+the highest `latency_ms`, gpt-4o-mini answers `74` on the raw JSON and `1074`
+on the columnar payload — `1074` is the `user_id` of event 74. It found the
+right row and read the wrong column.
+
+Two things this is *not*:
+
+- **Not a near-tie effect.** `events.fastest_event` has a 35.8% gap between the
+  correct answer and the runner-up and still regresses. Margin width does not
+  predict the failure.
+- **Not data loss.** Single-row retrieval is clean on both models, all four
+  tasks, both payloads. `test_compression_never_regresses_retrieval` pins this
+  invariant with no exemptions.
+
+So the practical boundary: **if you send large uniform record sets to a small
+model and ask it to scan a column** — max, min, "which row has the highest X" —
+compression can change the answer. Retrieval, code and prose questions are
+unaffected, and a mid-tier model handles the aggregations fine.
+
+Mitigations, in order of cost:
+
+- Route aggregation-style questions to a stronger model. The routing layer
+  already exists for this.
+- Do the aggregation yourself before the payload reaches the model. Asking an
+  LLM to find a maximum over a hundred rows is an expensive way to run `max()`.
+- Disable compression for that call by leaving `compression` unset on the
+  request's config.
+
+Repeating the `COLS:` header every N rows would likely help, and is deliberately
+not implemented: it would be tuning the wire format to one weak model's failure
+mode, and it invalidates every recorded cassette. The exempted cases are pinned
+in `KNOWN_REGRESSIONS` in the fidelity suite, which fails if the list grows *or*
+if a listed case quietly starts passing.
+
 ## The semantic cache is, in practice, close to an exact-match cache
 
 At the shipped `similarity_threshold` of `0.95`, measured against labelled

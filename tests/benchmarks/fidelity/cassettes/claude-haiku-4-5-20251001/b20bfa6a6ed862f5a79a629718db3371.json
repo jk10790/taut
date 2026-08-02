@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "code.raises_on_short_seat[raw]",
+  "request_key": "b20bfa6a6ed862f5a79a629718db3371",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. What exception class is raised when the seat identifier is too short?",
+  "request_message_count": 0,
+  "response": {
+    "content": "ValueError",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 569,
+      "output_tokens": 4
+    }
+  }
+}

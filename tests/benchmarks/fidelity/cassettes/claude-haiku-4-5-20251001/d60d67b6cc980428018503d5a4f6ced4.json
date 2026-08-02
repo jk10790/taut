@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "inventory.count_archived[compressed]",
+  "request_key": "d60d67b6cc980428018503d5a4f6ced4",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. How many items have status \"archived\"?",
+  "request_message_count": 0,
+  "response": {
+    "content": "26",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 1491,
+      "output_tokens": 5
+    }
+  }
+}

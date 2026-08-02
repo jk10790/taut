@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "events.count_refunds[compressed]",
+  "request_key": "d457567feaa6ba6d3febb613c8da5f47",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "\n\nNote: Some JSON data has been converted to a columnar table format (COLS: ... ROWS: ...). Please interpret it accordingly.\nAnswer using only the provided context. Reply with the answer alone and nothing else. How many events have the action \"refund\"?",
+  "request_message_count": 0,
+  "response": {
+    "content": "30",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 3439,
+      "output_tokens": 5
+    }
+  }
+}

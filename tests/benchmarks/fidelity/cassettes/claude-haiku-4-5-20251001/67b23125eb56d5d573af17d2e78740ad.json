@@ -1,0 +1,17 @@
+{
+  "note": "Recorded by scripts/record_fidelity.py. Do not hand-edit.",
+  "label": "faq.scim_on_growth[raw]",
+  "request_key": "67b23125eb56d5d573af17d2e78740ad",
+  "request_model": "claude-haiku-4-5-20251001",
+  "request_preview": "Answer using only the provided context. Reply with the answer alone and nothing else. Is SCIM provisioning available on the Growth plan? Yes or no.",
+  "request_message_count": 0,
+  "response": {
+    "content": "No.",
+    "model": "claude-haiku-4-5-20251001",
+    "finish_reason": "stop",
+    "usage": {
+      "input_tokens": 429,
+      "output_tokens": 5
+    }
+  }
+}
