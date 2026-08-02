@@ -6,6 +6,9 @@
 #
 #   * a claim with status "shipped" must name a test that exists and passes
 #   * a claim with status "unimplemented" must NOT be asserted in the docs
+#   * a claim with status "unverified" has a test that cannot run yet (it
+#     needs recorded fixtures); it must NOT be asserted in the docs either,
+#     and the status is cross-checked against whether those fixtures exist
 #
 # This file is the contract that stopped the documentation drifting from the
 # code. If you want to claim something new in the README, add it here with a
@@ -288,3 +291,19 @@ claims:
       Structured payloads do compress well, but that is compress.json.columnar,
       not a document-compression capability. Do not restore this claim without
       an implementation and a corpus measurement.
+
+  # ------------------------------------------------------------ fidelity ---
+  - id: fidelity.compression_preserves_answers
+    claim: Compression does not change the model's answer to a question about the payload.
+    source: README.md
+    test: tests/benchmarks/test_fidelity.py::test_compression_causes_no_answer_regressions
+    status: unverified
+    note: >
+      This is the product brief's actual north star ("without degrading the
+      accuracy of the AI's output") and it has never been measured. The test
+      and the 14-task set exist and run from committed cassettes, but no
+      cassettes have been recorded yet, so the suite skips. Recording is a
+      local, key-in-hand operation: `python scripts/record_fidelity.py --record`
+      (~$0.09 for both providers). test_manifest.py cross-checks this status
+      against cassette presence, so once cassettes land this must be promoted
+      to `shipped` or CI fails. Until then the claim must not appear in the docs.

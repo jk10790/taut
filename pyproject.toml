@@ -43,7 +43,7 @@ addopts = "--strict-markers"
 markers = [
     "e2e: spins up live HTTP servers on localhost (slower, port-bound)",
     "bench: measured performance runs against the checked-in corpus",
-    "costly: calls a real LLM provider and spends money (never runs in PR CI)",
+    "costly: spends money against a real provider; never runs in CI",
 ]
 
 [tool.ruff]

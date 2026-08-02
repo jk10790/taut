@@ -98,16 +98,23 @@ rather than a guess.
 ```bash
 pip install -e ".[cache,proxy,redis,dev]"
 
-pytest -m "not e2e and not costly"   # unit + integration
+pytest -m "not e2e and not bench"    # unit, integration, claims, fidelity replay
 pytest -m e2e                        # live proxy over localhost
 pytest tests/claims                  # documented claims
 pytest tests/benchmarks -m bench     # measured compression
 ruff check .
 ```
 
-`pytest tests/benchmarks -m costly` runs fidelity checks against a real
-provider — it verifies compression does not change the model's answers. It
-spends money and is excluded from CI.
+Fidelity benchmarks — does compression change the model's answers? — run from
+committed cassettes, so they need no API key and no network. Recording new
+cassettes is a local, key-in-hand operation and never runs in CI:
+
+```bash
+python scripts/record_fidelity.py --dry-run   # estimate cost, call nothing
+python scripts/record_fidelity.py --record    # needs a key, ~$0.09
+```
+
+See [tests/benchmarks/fidelity/README.md](tests/benchmarks/fidelity/README.md).
 
 ## License
 

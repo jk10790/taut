@@ -42,13 +42,15 @@ def test_manifest_is_wellformed():
             assert field in claim, f"{claim.get('id', '?')} missing field {field!r}"
         assert claim["id"] not in seen, f"duplicate claim id {claim['id']}"
         seen.add(claim["id"])
-        assert claim["status"] in ("shipped", "unimplemented"), claim["id"]
+        assert claim["status"] in ("shipped", "unimplemented", "unverified"), claim["id"]
 
 
 def test_every_shipped_claim_names_a_real_test():
     """A claim whose test does not exist is a claim nothing is checking."""
-    available = _test_names_in(CLAIM_TESTS) | _test_names_in(
-        REPO / "tests" / "claims" / "test_docs_examples.py"
+    available = (
+        _test_names_in(CLAIM_TESTS)
+        | _test_names_in(REPO / "tests" / "claims" / "test_docs_examples.py")
+        | _test_names_in(REPO / "tests" / "benchmarks" / "test_fidelity.py")
     )
     missing = []
     for claim in _load():
@@ -77,6 +79,11 @@ def test_unimplemented_claims_are_not_asserted_in_the_docs():
 
     # Phrases that would constitute making an unimplemented claim.
     forbidden = {
+        "fidelity.compression_preserves_answers": [
+            r"without degrading",
+            r"answers are unchanged",
+            r"preserves the model's answer",
+        ],
         "routing.by_health": [
             r"100%\s*CPU",
             r"\bby\s+health\b",
@@ -90,17 +97,17 @@ def test_unimplemented_claims_are_not_asserted_in_the_docs():
         ],
     }
 
-    unimplemented = {c["id"] for c in _load() if c["status"] == "unimplemented"}
+    unproven = {c["id"] for c in _load() if c["status"] in ("unimplemented", "unverified")}
     violations = []
     for claim_id, patterns in forbidden.items():
-        if claim_id not in unimplemented:
+        if claim_id not in unproven:
             continue
         for pattern in patterns:
             match = re.search(pattern, docs_text)
             if match:
                 violations.append(f"{claim_id}: docs still say {match.group(0)!r}")
     assert not violations, (
-        "documentation asserts capabilities marked unimplemented in "
+        "documentation asserts capabilities that are not proven in "
         f"docs/claims.yaml: {violations}"
     )
 
@@ -130,3 +137,34 @@ def test_readme_numbers_come_from_the_benchmark_baseline():
         f"README quotes percentages not present in baseline.json: {sorted(unbacked)}. "
         f"Measured values are {sorted(measured)}."
     )
+
+
+def test_fidelity_status_matches_recorded_cassettes():
+    """An unrunnable test must not be quietly forgotten.
+
+    The fidelity suite skips when no cassettes are committed. A skip reads as
+    green, so without this check the claim could sit at "unverified" forever --
+    or worse, cassettes could land and nobody would promote the claim or the
+    docs. This ties the manifest to the facts on disk in both directions.
+    """
+    from tests.benchmarks.fidelity.runner import MODELS
+    from tests.benchmarks.fidelity.cassettes import CassetteStore
+
+    claim = next(
+        c for c in _load() if c["id"] == "fidelity.compression_preserves_answers"
+    )
+    recorded = {m: CassetteStore(m).count() for m in MODELS}
+    any_recorded = any(count > 0 for count in recorded.values())
+
+    if any_recorded:
+        assert claim["status"] == "shipped", (
+            f"cassettes exist ({recorded}) so the fidelity suite now runs. "
+            "Promote fidelity.compression_preserves_answers to status: shipped "
+            "and state the result in the docs."
+        )
+    else:
+        assert claim["status"] == "unverified", (
+            "no cassettes are committed, so the fidelity suite skips. The claim "
+            "must stay status: unverified until "
+            "`python scripts/record_fidelity.py --record` has been run."
+        )
