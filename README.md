@@ -15,9 +15,12 @@ need to send never leave your network.
 
 ### What it does
 
-- **Semantic caching** — identical and near-identical requests are served
-  locally. Embeddings run on ONNX; no PyTorch. In-memory FAISS for development,
-  Redis vector search for production, with per-tenant namespace isolation.
+- **Semantic caching** — repeated requests are served locally. Embeddings run
+  on ONNX; no PyTorch. In-memory FAISS for development, Redis vector search for
+  production, with per-tenant namespace isolation. At the default threshold
+  this behaves close to an exact-match cache — see
+  [Limitations](docs/limitations.md#the-semantic-cache-is-in-practice-close-to-an-exact-match-cache)
+  for the measured precision/recall curve.
 - **Payload compression** — JSON arrays become columnar text; Python source is
   stripped of docstrings and annotations via AST rewriting. Measured on the
   checked-in corpus: **54% reduction** on JSON logs, **58%** on Python source.

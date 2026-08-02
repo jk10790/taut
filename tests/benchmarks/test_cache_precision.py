@@ -111,12 +111,42 @@ def test_threshold_sweep_is_reported(similarities, capsys):
         print("\n".join(lines))
 
 
+def test_default_threshold_recall_is_low(similarities):
+    """Record the cost of being safe.
+
+    At the shipped default the cache is safe (no false hits, asserted above)
+    but rarely fires on a reworded question. This is a hard gate on the number
+    documented in docs/limitations.md, so the docs cannot quietly overstate how
+    "semantic" the semantic cache is.
+    """
+    hits = sum(1 for s in similarities["paraphrase"] if s >= SHIPPED_DEFAULT)
+    recall = hits / len(PARAPHRASES)
+    assert recall <= 0.35, (
+        f"recall at {SHIPPED_DEFAULT} improved to {recall:.0%} -- this is good news, "
+        "but docs/limitations.md and docs/claims.yaml quote the old figure. Update them."
+    )
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "KNOWN LIMITATION, not a flaky test. all-MiniLM-L6-v2 does not separate "
+        "paraphrases from near-misses on short queries: measured worst paraphrase "
+        "0.879 ('list all active users' / 'show me every active user') scores BELOW "
+        "the worst near-miss 0.940 ('show costs for July 2026' / '...June 2026'). "
+        "No single threshold is therefore both safe and useful, which is why the "
+        "default of 0.95 is tuned for safety and yields ~17% recall. Fixing this "
+        "needs a better embedding model or a hybrid lexical+vector match, not a "
+        "threshold change. strict=True: if this starts passing, the limitation is "
+        "resolved and the docs must be updated."
+    ),
+)
 def test_paraphrases_score_above_near_misses(similarities):
-    """The embedding must separate the two classes at all.
+    """The embedding must separate the two classes for tuning to be possible.
 
     If the worst paraphrase scores below the best near-miss, no threshold can
     give both good recall and good precision, and the layer cannot be made
-    safe by tuning.
+    both safe and useful by tuning alone.
     """
     worst_paraphrase = min(similarities["paraphrase"])
     best_near_miss = max(similarities["near_miss"])

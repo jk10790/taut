@@ -27,6 +27,13 @@ claims:
     source: README.md
     test: tests/claims/test_documented_claims.py::test_cache_semantic_similar
     status: shipped
+    note: >
+      The mechanism works, but measure before relying on it. At the shipped
+      threshold of 0.95, recall against labelled paraphrase pairs is ~17% --
+      only trivial rewordings hit. The classes overlap (worst paraphrase 0.879
+      < worst near-miss 0.940), so no threshold is both safe and useful. See
+      the limitation documented in docs/limitations.md and the strict xfail in
+      tests/benchmarks/test_cache_precision.py.
 
   - id: cache.onnx_local
     claim: Embeddings run locally via ONNX with no PyTorch dependency.

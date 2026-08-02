@@ -40,8 +40,11 @@ jobs:
           cache: pip
       - name: Install
         run: pip install -e ".[cache,proxy,redis,dev]"
+      # Benchmarks are owned by the `claims` job -- they download a ~90MB
+      # embedding model, and running them on every matrix entry duplicates that
+      # for no extra signal.
       - name: Unit + integration tests
-        run: pytest -m "not e2e and not costly" -q
+        run: pytest -m "not e2e and not costly and not bench" -q
       - name: End-to-end proxy tests
         run: pytest -m e2e -q
 

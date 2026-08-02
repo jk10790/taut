@@ -17,6 +17,37 @@ If your context is mostly retrieved natural-language documents, `taut`'s
 compression layer will not shrink it. Use the caching and routing layers, and
 handle document reduction before it reaches `taut`.
 
+## The semantic cache is, in practice, close to an exact-match cache
+
+At the shipped `similarity_threshold` of `0.95`, measured against labelled
+paraphrase and near-miss pairs (`tests/benchmarks/test_cache_precision.py`):
+
+| threshold | recall | precision | false hits |
+|---|---|---|---|
+| 0.80 | 100% | 60% | 4 |
+| 0.85 | 100% | 75% | 2 |
+| 0.90 | 67% | 80% | 1 |
+| **0.95** | **17%** | **100%** | **0** |
+
+Only trivially reworded questions hit — "how do I reset my password" against
+"how can I reset my password". A genuine paraphrase such as "list all active
+users" against "show me every active user" scores 0.879 and misses.
+
+Lowering the threshold does not fix this, because the classes overlap. That
+same 0.879 paraphrase scores *below* a near-miss pair that means something
+different: "show costs for July 2026" against "show costs for June 2026" scores
+0.940. Any threshold loose enough to catch the paraphrase will also serve June's
+costs when July's were asked for.
+
+This is a property of `all-MiniLM-L6-v2` on short queries, not of the cache
+plumbing. Improving it needs a stronger embedding model or a hybrid
+lexical+vector match. Until then, expect the cache to earn its keep on
+genuinely repeated requests — retries, polling, fan-out over identical prompts —
+rather than on natural-language variety.
+
+The default is deliberately tuned for safety. Serving a confidently wrong
+answer costs more than a cache miss.
+
 ## No health-based or load-aware routing
 
 `taut` routes by *complexity*, not by provider health. There is no CPU probing,
