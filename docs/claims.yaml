@@ -31,12 +31,38 @@ claims:
     test: tests/claims/test_documented_claims.py::test_cache_semantic_similar
     status: shipped
     note: >
-      The mechanism works, but measure before relying on it. At the shipped
-      threshold of 0.95, recall against labelled paraphrase pairs is ~17% --
-      only trivial rewordings hit. The classes overlap (worst paraphrase 0.879
-      < worst near-miss 0.940), so no threshold is both safe and useful. See
-      the limitation documented in docs/limitations.md and the strict xfail in
-      tests/benchmarks/test_cache_precision.py.
+      The mechanism works, but measure before relying on it. Against 50
+      labelled pairs, recall at the shipped threshold of 0.95 is 12% -- only
+      trivial rewordings hit -- and the classes overlap badly (worst paraphrase
+      0.790 < worst near-miss 0.995), so no threshold is both safe and useful.
+      The earlier note here quoted 17% recall and zero false hits at 0.95; that
+      came from a 13-pair set that was too small to expose the failure. On 50
+      pairs the shipped default admits false hits, which is what motivated
+      cache.discriminative_guard. See docs/limitations.md and the two strict
+      xfails in tests/benchmarks/test_cache_precision.py.
+
+  - id: cache.discriminative_guard
+    claim: >
+      A semantic cache hit is vetoed when the two queries disagree on a number,
+      year, month or quarter.
+    source: docs/limitations.md
+    test: tests/unit/test_cache_guards.py::test_guard_turns_a_date_mismatch_into_a_miss
+    status: shipped
+    note: >
+      Embeddings score "show costs for July 2026" against "show costs for June
+      2026" at 0.940, above any usable threshold, because one month token in
+      nine words barely moves a pooled vector. The guard requires exact
+      agreement on digit-bearing tokens, months and quarters before a hit is
+      served. Measured against the labelled set: blocks 8 of 25 near-miss pairs
+      and 0 of 25 paraphrases; at the shipped threshold it halves false hits
+      (2 -> 1) while costing no true hits.
+      It cannot reach the remaining collision class, which is argument order --
+      "is the Pro plan cheaper than Growth" vs "is the Growth plan cheaper than
+      Pro" have identical token sets and score 0.978. That is pinned by a
+      strict xfail rather than papered over.
+      On by default: the guard can only turn a hit into a miss, and a miss is
+      the cheaper mistake. Disable with
+      SemanticCacheConfig(discriminative_guard=False).
 
   - id: cache.onnx_local
     claim: Embeddings run locally via ONNX with no PyTorch dependency.

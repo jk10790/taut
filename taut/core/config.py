@@ -15,6 +15,12 @@ class SemanticCacheConfig(BaseModel):
     embedding_model: str = "Xenova/all-MiniLM-L6-v2"
     redis_url: str | None = None
     embedder: Any = None
+    # Veto a semantic hit when the two queries disagree on a number, year,
+    # month or quarter. Embeddings score "costs for July 2026" against
+    # "costs for June 2026" at 0.94, well above any usable threshold. On by
+    # default: the guard can only turn a hit into a miss, and a miss is the
+    # cheaper mistake. See taut/layers/cache/guards.py.
+    discriminative_guard: bool = True
 
 
 class CompressionConfig(BaseModel):

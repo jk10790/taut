@@ -77,34 +77,74 @@ if a listed case quietly starts passing.
 
 ## The semantic cache is, in practice, close to an exact-match cache
 
-At the shipped `similarity_threshold` of `0.95`, measured against labelled
+At the shipped `similarity_threshold` of `0.95`, measured against 50 labelled
 paraphrase and near-miss pairs (`tests/benchmarks/test_cache_precision.py`):
 
-| threshold | recall | precision | false hits |
-|---|---|---|---|
-| 0.80 | 100% | 60% | 4 |
-| 0.85 | 100% | 75% | 2 |
-| 0.90 | 67% | 80% | 1 |
-| **0.95** | **17%** | **100%** | **0** |
+| threshold | recall | precision | false hits | with guard |
+|---|---|---|---|---|
+| 0.80 | 96% | 65% | 13 | 8 |
+| 0.85 | 88% | 76% | 7 | 3 |
+| 0.90 | 56% | 74% | 5 | 2 |
+| **0.95** | **12%** | **60% → 75%** | **2** | **1** |
 
 Only trivially reworded questions hit — "how do I reset my password" against
 "how can I reset my password". A genuine paraphrase such as "list all active
 users" against "show me every active user" scores 0.879 and misses.
 
-Lowering the threshold does not fix this, because the classes overlap. That
-same 0.879 paraphrase scores *below* a near-miss pair that means something
-different: "show costs for July 2026" against "show costs for June 2026" scores
-0.940. Any threshold loose enough to catch the paraphrase will also serve June's
-costs when July's were asked for.
+Lowering the threshold does not fix this, because the classes overlap badly:
+the worst paraphrase scores 0.790 while the worst near-miss scores 0.995. No
+threshold is both safe and useful.
+
+> **These numbers replace an earlier, rosier table.** The first version of this
+> benchmark used 13 pairs and reported 100% precision with zero false hits at
+> 0.95. That was the corpus flattering the cache, not the cache being good:
+> expanding to 50 pairs written blind to the model's scores exposed false hits
+> at the shipped default. A benchmark small enough to pass is worse than none.
+
+### The discriminative guard
+
+Vector similarity answers "are these about the same thing?", not "do they have
+the same answer". The gap is concentrated in high-information tokens: one month
+name in nine words barely moves a pooled vector, but it changes the answer
+completely.
+
+So a semantic hit must now clear a second bar — an exact match on numbers,
+years, months and quarters (`taut/layers/cache/guards.py`). Measured: it blocks
+**8 of 25** near-miss pairs and **0 of 25** paraphrases. It can only ever turn
+a hit into a miss, so it is on by default; set
+`SemanticCacheConfig(discriminative_guard=False)` to disable it.
+
+```
+"show costs for July 2026"  vs  "show costs for June 2026"
+  cosine 0.940  -> above any usable threshold
+  guard         -> VETOED, {july} != {june}
+```
+
+### What the guard cannot fix
+
+One class of collision survives, and no token-based rule can reach it:
+
+```
+0.978  'is the Pro plan cheaper than Growth' | 'is the Growth plan cheaper than Pro'
+0.913  'who approved this pull request'      | 'who requested this pull request'
+0.862  'list all active users'               | 'list all inactive users'
+```
+
+The first pair has an *identical* bag of words and differs only in argument
+order. Separating it needs order-sensitive comparison, not a better threshold
+and not a bigger token set. `test_default_threshold_admits_no_false_hits` is
+marked `xfail(strict=True)` on exactly this pair, so if it is ever resolved the
+suite will say so.
 
 This is a property of `all-MiniLM-L6-v2` on short queries, not of the cache
-plumbing. Improving it needs a stronger embedding model or a hybrid
-lexical+vector match. Until then, expect the cache to earn its keep on
-genuinely repeated requests — retries, polling, fan-out over identical prompts —
-rather than on natural-language variety.
+plumbing. A stronger model shifts the numbers without closing the gap: measured
+on `bge-small-en-v1.5`, recall at 0.95 rises from 12% to 40% but false hits do
+not reach zero either.
 
-The default is deliberately tuned for safety. Serving a confidently wrong
-answer costs more than a cache miss.
+Expect the cache to earn its keep on genuinely repeated requests — retries,
+polling, fan-out over identical prompts — rather than on natural-language
+variety. The default is deliberately tuned for safety: serving a confidently
+wrong answer costs more than a cache miss.
 
 ## No health-based or load-aware routing
 
